@@ -9,9 +9,7 @@ export default async function Page() {
 		redirect('/dashboard');
 	}
 	return (
-		<div>
-			<h2>Login</h2>
-			<p>Login</p>
+		<div className='flex flex-col w-80 mx-auto justify-center h-screen'>
 			<Login />
 		</div>
 	);
