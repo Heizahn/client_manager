@@ -3,31 +3,23 @@
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { HOST_WS } from '@/ENV';
 
 export default function Page() {
 	const [qrCode, setQrCode] = useState('');
-	const [message, setMessage] = useState('');
 	const [loading, setLoading] = useState(true);
-	const socket = io(HOST_WS);
-	const router = useRouter();
-
-	const redirect = (path: string) => {
-		router.push(path);
-	};
+	const socket = io('http://localhost:3000/');
 
 	socket.connect();
 
 	useEffect(() => {
-		socket.on('auth', (data) => {
+		socket.on('auth', () => {
 			setQrCode('');
-			setMessage(data.message);
 			setLoading(false);
-			socket.disconnect();
+			redirect('/dashboard/send_whatsapp');
 		});
 		socket.on('qr_code', (data) => {
-			setMessage('');
 			setQrCode(data.qr_code);
 			setLoading(false);
 		});
@@ -37,17 +29,17 @@ export default function Page() {
 			.then((data) => {
 				if (data === 'Authenticated') {
 					redirect('/dashboard/send_whatsapp');
-					setMessage(data);
-					setLoading(false);
-					socket.disconnect();
 				}
 			});
-	}, [qrCode, message, socket, redirect]);
+	}, [qrCode, socket]);
 
 	return (
 		<div>
-			<h2>Login Whatsapp</h2>
-			{loading && <p>Loading...</p>}
+			{loading && (
+				<div className='absolute h-screen w-full top-0 left-0 flex items-center justify-center bg-black/50 p-8'>
+					<p>Loading...</p>
+				</div>
+			)}
 			{qrCode && (
 				<div className='flex flex-col gap-4 items-center'>
 					<p>QR Code:</p>
@@ -56,7 +48,6 @@ export default function Page() {
 					</div>
 				</div>
 			)}
-			{message && <p>Connection: {message}</p>}
 		</div>
 	);
 }

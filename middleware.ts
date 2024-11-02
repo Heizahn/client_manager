@@ -1,13 +1,8 @@
-import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest } from 'next/server';
+import { UpdateSession } from './lib/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
-	const cookiesStore = await cookies();
-	const session = cookiesStore.get('session');
-
-	if (!session) {
-		return NextResponse.redirect(new URL('/login', request.url));
-	}
+	return await UpdateSession(request);
 }
 
 export const config = {

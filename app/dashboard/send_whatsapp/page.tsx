@@ -1,21 +1,15 @@
 'use client';
 
 import { HOST_WS } from '@/ENV';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
-	const router = useRouter();
-
 	const [message, setMessage] = useState({
 		phone_number: '',
 		message_title: '',
 		message_body: '',
 	});
-
-	const redirect = (path: string) => {
-		router.replace(path);
-	};
 
 	const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -50,7 +44,7 @@ export default function Page() {
 					redirect('/dashboard/login_whatsapp');
 				}
 			});
-	}, [redirect]);
+	}, []);
 	return (
 		<div>
 			<h2>Send Whatsapp</h2>
