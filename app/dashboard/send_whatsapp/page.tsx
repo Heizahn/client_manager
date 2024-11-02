@@ -1,5 +1,6 @@
 'use client';
 
+import { HOST_WS } from '@/ENV';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -19,7 +20,7 @@ export default function Page() {
 	const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		fetch('http://localhost:3000/api/v1/send_message', {
+		fetch(`${HOST_WS}/api/v1/send_message`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -42,7 +43,7 @@ export default function Page() {
 	};
 
 	useEffect(() => {
-		fetch('http://localhost:3000/api/v1/login_whatsapp')
+		fetch(`${HOST_WS}/api/v1/login_whatsapp`)
 			.then((res) => res.json())
 			.then((data) => {
 				if (data !== 'Authenticated') {
