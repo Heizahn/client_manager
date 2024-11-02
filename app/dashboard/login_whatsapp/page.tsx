@@ -42,7 +42,7 @@ export default function Page() {
 					socket.disconnect();
 				}
 			});
-	}, [qrCode, message, socket]);
+	}, [qrCode, message, socket, redirect]);
 
 	return (
 		<div>

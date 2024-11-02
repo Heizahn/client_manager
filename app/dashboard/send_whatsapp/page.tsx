@@ -50,7 +50,7 @@ export default function Page() {
 					redirect('/dashboard/login_whatsapp');
 				}
 			});
-	}, []);
+	}, [redirect]);
 	return (
 		<div>
 			<h2>Send Whatsapp</h2>

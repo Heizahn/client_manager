@@ -2,14 +2,15 @@
 
 import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { useFormState, useFormStatus } from 'react-dom';
+
+import { useActionState } from 'react';
 import { authenticate } from '@/lib/actions';
 
 export default function LoginForm() {
-	const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+	const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
 
 	return (
-		<form action={dispatch} className='space-y-3 border-2 border-gray-400 rounded-lg'>
+		<form action={formAction} className='space-y-3 border-2 border-gray-400 rounded-lg'>
 			<div className='flex-1 rounded-lg px-6 pb-4 pt-8'>
 				<h1 className={`mb-3 text-2xl`}>Inicio de sesión</h1>
 				<div className='w-full'>
@@ -53,7 +54,7 @@ export default function LoginForm() {
 						</div>
 					</div>
 				</div>
-				<LoginButton />
+				<LoginButton isPending={isPending} />
 				<div className='flex h-8 items-end space-x-1'>
 					{/* Add form errors here */}
 					<div
@@ -74,18 +75,11 @@ export default function LoginForm() {
 	);
 }
 
-function LoginButton() {
-	const { pending } = useFormStatus();
-
-	if (pending) {
-		setTimeout(() => {
-			location.reload();
-		}, 2000);
-	}
+function LoginButton({ isPending }: { isPending: boolean }) {
 	return (
 		<button
 			className='mt-4 w-full py-2 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800'
-			aria-disabled={pending}
+			aria-disabled={isPending}
 		>
 			<span>Iniciar Sesión</span>{' '}
 			<ArrowRightIcon className='ml-3 h-5 w-5 text-gray-50' />
