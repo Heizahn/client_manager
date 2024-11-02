@@ -8,8 +8,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			<div className='w-full flex-none md:w-64'>
 				<SideNav />
 			</div>
-			<div className='flex-grow p-6 pt-0 md:overflow-y-auto md:p12'>
-				<div className='w-full pt-6'>{children}</div>
+			<div className='flex-grow pl-1 pr-3 pt-0 md:overflow-y-auto '>
+				<div className='w-full pt-2'>{children}</div>
 			</div>
 		</div>
 	);
@@ -27,7 +27,7 @@ function SideNav() {
 			<div className='flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2'>
 				<NavLinks />
 				{/* <div className='hidden h-auto w-full grow rounded-md bg-gray-50 md:block'></div> */}
-				<div>
+				<div className=''>
 					<ButtonLogout />
 				</div>
 			</div>
