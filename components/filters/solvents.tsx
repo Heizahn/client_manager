@@ -17,7 +17,7 @@ export default function Solvents() {
 			href={'/dashboard/clients/solvents'}
 			className={`${
 				!isActive ? '' : 'underline underline-offset-4'
-			} hover:underline underline-offset-4 px-3 transition-all duration-300 ease-linear`}
+			} hover:underline underline-offset-4 px-3 text-green-500 `}
 		>
 			Solventes {clientsCount}
 		</Link>

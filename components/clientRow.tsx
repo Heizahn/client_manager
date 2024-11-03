@@ -1,17 +1,21 @@
+'use client';
+
 import { Client } from '@/interfaces';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
 export default function ClientRow({ client }: { client: Client }) {
+	const router = useRouter();
+	const handleClick = (id: string) => {
+		router.push(`/dashboard/clients/${id}`);
+	};
 	return (
 		<>
-			<tr className=' border-b border-gray-400 hover:bg-gray-700 transition-all duration-300 ease-linear '>
-				<td className='text-left py-1 pl-4'>
-					<Link
-						href={`/dashboard/clients/${client.id}`}
-						className='hover:underline hover:underline-offset-2'
-					>
-						{client.nombre}
-					</Link>
-				</td>
+			<tr
+				className='border-b border-gray-400 hover:cursor-pointer hover:bg-gray-700 transition-all duration-300 ease-linear'
+				onClick={() => handleClick(client.id)}
+			>
+				<td className='text-left py-1 pl-4'>{client.nombre}</td>
 				<td>{client.identificacion}</td>
 				<td>{client.telefono}</td>
 				<td>{client.sector}</td>

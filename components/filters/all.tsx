@@ -18,7 +18,7 @@ export default function All() {
 			href='/dashboard/clients'
 			className={`${
 				!isActive ? '' : 'underline underline-offset-4'
-			} hover:underline underline-offset-4 px-3 transition-all duration-300 ease-linear`}
+			} hover:underline underline-offset-4 px-3 `}
 		>
 			Todos {clientsCount}
 		</Link>
