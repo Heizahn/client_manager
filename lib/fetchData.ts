@@ -61,3 +61,45 @@ export async function fetchSuspendedClients(): Promise<Client[]> {
 
 	return data || [];
 }
+
+export async function fetchCountClients(): Promise<number> {
+	noStore();
+	const supabase = await createClient();
+	const { data } = await supabase.from('clients').select('id');
+
+	return data?.length || 0;
+}
+
+export async function fetchCountSolventsClients(): Promise<number> {
+	noStore();
+	const supabase = await createClient();
+	const { data } = await supabase
+		.from('clients')
+		.select('id')
+		.gte('saldo', 0);
+
+	return data?.length || 0;
+}
+
+export async function fetchCountDefaultersClients(): Promise<number> {
+	noStore();
+	const supabase = await createClient();
+	const { data } = await supabase
+		.from('clients')
+		.select('id')
+		.lt('saldo', 0)
+		.eq('estado', 'Activo');
+
+	return data?.length || 0;
+}
+
+export async function fetchCountSuspendedClients(): Promise<number> {
+	noStore();
+	const supabase = await createClient();
+	const { data } = await supabase
+		.from('clients')
+		.select('id')
+		.eq('estado', 'Suspendido');
+
+	return data?.length || 0;
+}
