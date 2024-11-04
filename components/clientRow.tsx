@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 export default function ClientRow({ client }: { client: Client }) {
 	const router = useRouter();
 	const handleClick = (id: string) => {
-		router.push(`/dashboard/clients/${id}`);
+		router.push(`/dashboard/client/${id}`);
 	};
 	return (
 		<>
