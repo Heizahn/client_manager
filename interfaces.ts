@@ -9,3 +9,7 @@ export interface Client {
 	saldo: number;
 	estado: string;
 }
+
+export interface ClientDetails extends Client {
+	direccion: string;
+}

@@ -1,4 +1,4 @@
-import { Client } from '@/interfaces';
+import { Client, ClientDetails } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -73,10 +73,7 @@ export async function fetchCountClients(): Promise<number> {
 export async function fetchCountSolventsClients(): Promise<number> {
 	noStore();
 	const supabase = await createClient();
-	const { data } = await supabase
-		.from('clients')
-		.select('id')
-		.gte('saldo', 0);
+	const { data } = await supabase.from('clients').select('id').gte('saldo', 0);
 
 	return data?.length || 0;
 }
@@ -96,10 +93,23 @@ export async function fetchCountDefaultersClients(): Promise<number> {
 export async function fetchCountSuspendedClients(): Promise<number> {
 	noStore();
 	const supabase = await createClient();
-	const { data } = await supabase
-		.from('clients')
-		.select('id')
-		.eq('estado', 'Suspendido');
+	const { data } = await supabase.from('clients').select('id').eq('estado', 'Suspendido');
 
 	return data?.length || 0;
+}
+
+export async function fetchClientById(id: string): Promise<ClientDetails> {
+	noStore();
+	const supabase = await createClient();
+	const { data, error } = await supabase
+		.from('clients')
+		.select(
+			'id, nombre, identificacion, telefono, sector, direccion, ipv4, plan, saldo, estado',
+		)
+		.eq('id', id);
+
+	if (error) {
+		console.log(error);
+	}
+	return data![0];
 }
