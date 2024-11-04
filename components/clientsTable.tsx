@@ -5,7 +5,7 @@ export default function ClientsTable({ clients }: { clients: Client[] }) {
 	return (
 		<table className='w-full table-auto bg-gray-800 rounded-md'>
 			<thead>
-				<tr className='text-left text-lg'>
+				<tr className='text-left text-lg '>
 					<th className='pl-4 pt-2'>Nombre</th>
 					<th>Identificacion</th>
 					<th>Telefono</th>
