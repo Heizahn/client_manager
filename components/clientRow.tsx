@@ -11,7 +11,7 @@ export default function ClientRow({ client }: { client: Client }) {
 	};
 	return (
 		<>
-			<tr className='border-b border-gray-400 hover:cursor-pointer hover:bg-gray-700 transition-all duration-300 ease-linear'>
+			<tr className='border-t border-gray-400 hover:cursor-pointer hover:bg-gray-700 transition-all duration-300 ease-linear'>
 				<td onClick={() => handleClick(client.id)} className='text-left py-1 pl-4'>
 					{client.nombre}
 				</td>
