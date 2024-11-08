@@ -24,7 +24,11 @@ export default function ClientDetails({
 				</div>
 				<div className='w-72 lg:w-1/3 px-4 py-2'>
 					<DetailContainer title='Contacto'>
-						<Detail title='Teléfono:' label={client.telefono} />
+						<Detail
+							title='Teléfono:'
+							label={client.telefono}
+							href={`https://wa.me/${client.telefono.replace('0', '58')}`}
+						/>
 					</DetailContainer>
 				</div>
 				<div className='w-72 lg:w-1/3 px-4 py-2'>
