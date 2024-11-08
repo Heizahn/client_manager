@@ -104,7 +104,7 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 	const { data, error } = await supabase
 		.from('clients')
 		.select(
-			'id, nombre, identificacion, telefono, sector, direccion, ipv4, plan, saldo, estado',
+			'id, nombre, identificacion, telefono, sector, direccion, ipv4, plan, saldo, estado, router, created_at',
 		)
 		.eq('id', id);
 

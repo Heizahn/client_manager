@@ -12,4 +12,6 @@ export interface Client {
 
 export interface ClientDetails extends Client {
 	direccion: string;
+	router: string;
+	created_at: string;
 }
