@@ -1,8 +1,16 @@
 import { ClientDetails } from '@/interfaces';
-import NavCliente from './navCliente';
 import Breadcrumbs from '../breadcrums';
 
-export default function HeaderClient({ client }: { client: ClientDetails }) {
+export default function HeaderClient({
+	client,
+	children,
+}: {
+	client: ClientDetails | null;
+	children: React.ReactNode;
+}) {
+	if (!client) {
+		return <div>Loading...</div>;
+	}
 	return (
 		<>
 			<div className='flex flex-row justify-center items-center py-2 rounded-md bg-gray-800  '>
@@ -65,7 +73,7 @@ export default function HeaderClient({ client }: { client: ClientDetails }) {
 						</button>
 					</div>
 				</div>
-				<NavCliente />
+				{children}
 			</div>
 		</>
 	);
