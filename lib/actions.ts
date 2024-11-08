@@ -27,3 +27,20 @@ export async function logout() {
 	revalidatePath('/login');
 	redirect('/login');
 }
+
+export async function getUserName() {
+	const supabase = await createClient();
+	const { data, error } = await supabase.auth.getUser();
+
+	if (error || !data?.user) {
+		console.log(error || 'No user found');
+		return null;
+	}
+
+	const { id } = data.user;
+	const { data: profileData } = await supabase.from('profiles').select('name').eq('id', id);
+
+	const { name } = profileData![0];
+
+	return name;
+}

@@ -16,3 +16,12 @@ export interface ClientDetails extends Client {
 	created_at: string;
 	dia_corte: number;
 }
+
+export interface Router {
+	id: string;
+	nombre: string;
+	ip: string;
+	sector: string;
+	clientes: number;
+	estado: boolean;
+}
