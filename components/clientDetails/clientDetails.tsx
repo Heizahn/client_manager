@@ -1,6 +1,7 @@
 import type { ClientDetails } from '@/interfaces';
 import Detail from './detail';
 import DetailContainer from './detailContainer';
+import { formatDate } from './dateFormat';
 
 export default function ClientDetails({
 	client,
@@ -29,28 +30,50 @@ export default function ClientDetails({
 				<div className='w-72 lg:w-1/3 px-4 py-2'>
 					<DetailContainer title='Ubicación'>
 						<Detail title='Sector:' label={client.sector} />
-						<Detail title='Dirección:' label={client.direccion} />
+						<Detail
+							title='Dirección:'
+							label={client.direccion}
+							href={`https://www.google.com/maps/search/?api=1&query=${client.direccion}`}
+						/>
 					</DetailContainer>
 				</div>
 				<div className='w-72 lg:w-1/3 px-4 py-2'>
 					<DetailContainer title='Servicios'>
 						<Detail title='Router:' label={client.router} />
-						<Detail title='IPV4:' label={client.ipv4} />
+						<Detail
+							title='IPV4:'
+							label={client.ipv4}
+							href={`http://${client.ipv4}`}
+						/>
 						<Detail title='Plan:' label={client.plan} />
 					</DetailContainer>
 				</div>
 				<div className='w-72 lg:w-1/3 px-4 py-2'>
 					<DetailContainer title='Balance'>
-						<Detail title='Saldo:' label={client.saldo.toFixed(2)} />
-						<Detail title='Dia de Corte:' label={'6'} />
+						<Detail
+							title='Saldo:'
+							label={`${client.saldo.toFixed(2)}$`}
+							className={client.saldo < 0 ? 'text-red-500' : 'text-green-500'}
+						/>
+						<Detail title='Dia de Corte:' label={String(client.dia_corte)} />
 					</DetailContainer>
 				</div>
 				<div className='w-72 lg:w-1/3 px-4 py-2'>
 					<DetailContainer title='Estado'>
-						<Detail title='Estado:' label={client.estado} />
+						<Detail
+							title='Estado:'
+							label={client.estado}
+							className={
+								client.estado === 'Suspendido'
+									? 'text-red-500'
+									: client.saldo < 0
+									? 'text-orange-500'
+									: 'text-green-500'
+							}
+						/>
 						<Detail
 							title='Fecha de Creación:'
-							label={client.created_at.split('T')[0]}
+							label={formatDate(new Date(client.created_at))}
 						/>
 					</DetailContainer>
 				</div>

@@ -14,4 +14,5 @@ export interface ClientDetails extends Client {
 	direccion: string;
 	router: string;
 	created_at: string;
+	dia_corte: number;
 }

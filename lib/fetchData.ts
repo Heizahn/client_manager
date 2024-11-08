@@ -7,7 +7,8 @@ export async function fetchAllClients(): Promise<Client[]> {
 	const supabase = await createClient();
 	const { data, error } = await supabase
 		.from('clients')
-		.select('id, nombre, identificacion,telefono, sector, ipv4, plan, saldo, estado');
+		.select('id, nombre, identificacion,telefono, sector, ipv4, plan, saldo, estado')
+		.order('nombre');
 
 	if (error) {
 		console.log(error);
@@ -22,7 +23,8 @@ export async function fetchSolventsClients(): Promise<Client[]> {
 	const { data, error } = await supabase
 		.from('clients')
 		.select('id, nombre, identificacion,telefono, sector, ipv4, plan, saldo, estado')
-		.gte('saldo', 0);
+		.gte('saldo', 0)
+		.order('nombre');
 
 	if (error) {
 		console.log(error);
@@ -38,7 +40,8 @@ export async function fetchDefaultersClients(): Promise<Client[]> {
 		.from('clients')
 		.select('id, nombre, identificacion,telefono, sector, ipv4, plan, saldo, estado')
 		.lt('saldo', 0)
-		.eq('estado', 'Activo');
+		.eq('estado', 'Activo')
+		.order('nombre');
 
 	if (error) {
 		console.log(error);
@@ -53,7 +56,8 @@ export async function fetchSuspendedClients(): Promise<Client[]> {
 	const { data, error } = await supabase
 		.from('clients')
 		.select('id, nombre, identificacion,telefono, sector, ipv4, plan, saldo, estado')
-		.eq('estado', 'Suspendido');
+		.eq('estado', 'Suspendido')
+		.order('nombre');
 
 	if (error) {
 		console.log(error);
@@ -104,7 +108,7 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 	const { data, error } = await supabase
 		.from('clients')
 		.select(
-			'id, nombre, identificacion, telefono, sector, direccion, ipv4, plan, saldo, estado, router, created_at',
+			'id, nombre, identificacion, telefono, sector, direccion, ipv4, plan, saldo, estado, router, created_at, dia_corte',
 		)
 		.eq('id', id);
 
