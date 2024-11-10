@@ -1,4 +1,4 @@
-import ClientsTable from '@/components/clientsTable';
+import ClientsTable from '@/components/viewclients/clientsTable';
 
 import { Client } from '@/interfaces';
 import { fetchDefaultersClients } from '@/lib/fetchData';

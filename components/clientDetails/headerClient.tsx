@@ -1,5 +1,5 @@
 import { ClientDetails } from '@/interfaces';
-import Breadcrumbs from '../breadcrums';
+import Breadcrumbs from '../viewclients/breadcrums';
 
 export default function HeaderClient({
 	client,

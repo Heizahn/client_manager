@@ -1,4 +1,4 @@
-import NavLink from '@/components/NavLink';
+import NavLink from '@/components/layout/NavLink';
 
 export default function NavLinks() {
 	return (
