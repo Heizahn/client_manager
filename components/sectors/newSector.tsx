@@ -27,7 +27,7 @@ export default function NewSector({
 
 	useEffect(() => {
 		if (nombre == '') {
-			setError('El nombre es requerido');
+			setError('*');
 		} else {
 			setError('');
 		}
@@ -48,8 +48,9 @@ export default function NewSector({
 				</div>
 				<h3 className='text-2xl font-bold text-center mb-3'>Nuevo Sector</h3>
 				<div className='flex flex-col gap-1 mb-3'>
-					<label htmlFor='nombre'>Nombre:</label>
-					{error && <p className='text-red-500'>{error}</p>}
+					<label htmlFor='nombre'>
+						Nombre: {error && <span className='text-red-500'>{error}</span>}
+					</label>
 					<input
 						type='text'
 						name='nombre'
@@ -62,7 +63,7 @@ export default function NewSector({
 					type='submit'
 					disabled={error != ''}
 					className={`mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear ${
-						error != '' ? 'opacity-50 hover:bg-blue-700' : ''
+						error != '' ? 'opacity-50 bg-blue-950 hover:bg-blue-950' : ''
 					}`}
 				>
 					Crear
