@@ -12,12 +12,14 @@
 		"@heroicons/react": "^2.1.5",
 		"@supabase/ssr": "^0.5.1",
 		"@supabase/supabase-js": "^2.46.1",
+		"formik": "^2.4.6",
 		"next": "15.0.2",
 		"postgres": "^3.4.5",
 		"react": "19.0.0-rc-02c0e824-20241028",
 		"react-dom": "19.0.0-rc-02c0e824-20241028",
 		"react-qr-code": "^2.0.15",
-		"socket.io-client": "^4.8.1"
+		"socket.io-client": "^4.8.1",
+		"yup": "^1.4.0"
 	},
 	"devDependencies": {
 		"@types/node": "^20",

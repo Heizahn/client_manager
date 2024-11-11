@@ -1,5 +1,5 @@
 'use server';
-import type { Router, Sector, CreateRouter, Service } from '@/interfaces';
+import type { Router, Sector, CreateRouter, Service, CreateService } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
@@ -114,7 +114,7 @@ export async function fetchServices(): Promise<Service[]> {
 	const { data, error } = await supabase
 		.from('services')
 		.select('id, nombre, tipo, clientes, costo, estado')
-		.order('nombre');
+		.order('tipo');
 
 	if (error) {
 		console.log(error);
@@ -124,4 +124,28 @@ export async function fetchServices(): Promise<Service[]> {
 	}
 
 	return data;
+}
+
+export async function fetchCreateService(values: CreateService) {
+	const supabase = await createClient();
+	const supabaseServer = await createClientServer();
+	const {
+		data: { user },
+	} = await supabaseServer.auth.getUser();
+
+	if (!user) {
+		throw new Error('No user found');
+	}
+
+	const { id } = user;
+	const { nombre, tipo, costo } = values;
+	const { error } = await supabase
+		.from('services')
+		.insert({ nombre, tipo, costo, created_by: id, estado: true });
+
+	if (error) {
+		return Error(error.message);
+	}
+	revalidatePath('/dashboard/services');
+	return 'Servicio creado exitosamente';
 }

@@ -45,3 +45,9 @@ export interface Service {
 	costo: number;
 	estado: boolean;
 }
+
+export interface CreateService {
+	nombre: string;
+	tipo: string;
+	costo: number;
+}
