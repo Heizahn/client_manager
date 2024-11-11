@@ -1,7 +1,7 @@
 import type { ClientDetails } from '@/interfaces';
 import Detail from './detail';
 import DetailContainer from './detailContainer';
-import { formatDate } from './dateFormat';
+import { formatDate } from '../dateFormat';
 
 export default function ClientDetails({
 	client,

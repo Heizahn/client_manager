@@ -1,6 +1,7 @@
+'use server';
 import type { Router, Sector } from '@/interfaces';
 import { createClient } from './supabase/client';
-import { unstable_noStore as noStore } from 'next/cache';
+import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 
 export async function fetchRouters(): Promise<Router[]> {
 	noStore();
@@ -21,7 +22,7 @@ export async function fetchSectors(): Promise<Sector[]> {
 	noStore();
 	const supabase = await createClient();
 	const { data, error } = await supabase
-		.from('sectores')
+		.from('sectors')
 		.select('id, nombre, created_at, clientes, estado')
 		.order('nombre');
 
@@ -30,4 +31,15 @@ export async function fetchSectors(): Promise<Sector[]> {
 	}
 
 	return data || [];
+}
+
+export async function fetchCreateSector(nombre: string) {
+	const supabase = await createClient();
+	const { error } = await supabase.from('sectors').insert({ nombre, estado: true });
+
+	if (error) {
+		return Error(error.message);
+	}
+	revalidatePath('/dashboard/sectors');
+	return 'Sector creado exitosamente';
 }
