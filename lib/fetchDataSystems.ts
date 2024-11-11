@@ -1,5 +1,5 @@
 'use server';
-import type { Router, Sector, CreateRouter } from '@/interfaces';
+import type { Router, Sector, CreateRouter, Service } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
@@ -106,4 +106,22 @@ export async function fetchCreateRouter({ nombre, ip }: CreateRouter) {
 	}
 	revalidatePath('/dashboard/routers');
 	return 'Sector creado exitosamente';
+}
+
+export async function fetchServices(): Promise<Service[]> {
+	noStore();
+	const supabase = await createClient();
+	const { data, error } = await supabase
+		.from('services')
+		.select('id, nombre, tipo, clientes, costo, estado')
+		.order('nombre');
+
+	if (error) {
+		console.log(error);
+	}
+	if (!data) {
+		return [];
+	}
+
+	return data;
 }

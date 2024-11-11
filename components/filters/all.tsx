@@ -9,7 +9,9 @@ export default function All() {
 	const path = usePathname();
 
 	useEffect(() => {
-		fetchCountClients().then((count) => setClientsCount(count));
+		fetchCountClients().then((count) => {
+			setClientsCount(count);
+		});
 	}, []);
 
 	const isActive = path === '/dashboard/clients';

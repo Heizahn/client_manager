@@ -36,3 +36,12 @@ export interface Sector {
 	clientes: number;
 	estado: boolean;
 }
+
+export interface Service {
+	id: string;
+	nombre: string;
+	tipo: string;
+	clientes: number;
+	costo: number;
+	estado: boolean;
+}
