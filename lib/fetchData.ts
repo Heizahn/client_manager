@@ -28,7 +28,7 @@ export async function fetchAllClients(): Promise<Client[]> {
 		return {
 			...client,
 			sector,
-			service,
+			plan: service,
 		};
 	});
 }
@@ -59,7 +59,7 @@ export async function fetchSolventsClients(): Promise<Client[]> {
 		const service = services?.nombre || '';
 		return {
 			...client,
-			service,
+			plan: service,
 			sector,
 		};
 	});
@@ -92,7 +92,7 @@ export async function fetchDefaultersClients(): Promise<Client[]> {
 		const service = services?.nombre || '';
 		return {
 			...client,
-			service,
+			plan: service,
 			sector,
 		};
 	});
@@ -124,7 +124,7 @@ export async function fetchSuspendedClients(): Promise<Client[]> {
 		const service = services?.nombre || '';
 		return {
 			...client,
-			service,
+			plan: service,
 			sector,
 		};
 	});
@@ -224,7 +224,7 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 		return {
 			...client,
 			router,
-			service,
+			plan: service,
 			sector,
 		};
 	})[0];
