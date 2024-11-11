@@ -3,7 +3,7 @@ import { fetchRouters } from '@/lib/fetchDataSystems';
 import RouterRow from './routerRow';
 
 export default async function RouterTable() {
-	const routers = await fetchRouters();
+	const routers: Router[] = await fetchRouters();
 	return (
 		<div className='max-h-[calc(100vh_-_5.7rem)] overflow-y-auto scrollbar-none rounded-md mt-1'>
 			<table className='w-full bg-gray-800 '>

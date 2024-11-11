@@ -13,6 +13,7 @@
 		"@supabase/ssr": "^0.5.1",
 		"@supabase/supabase-js": "^2.46.1",
 		"next": "15.0.2",
+		"postgres": "^3.4.5",
 		"react": "19.0.0-rc-02c0e824-20241028",
 		"react-dom": "19.0.0-rc-02c0e824-20241028",
 		"react-qr-code": "^2.0.15",

@@ -25,7 +25,10 @@ export interface Router {
 	clientes: number;
 	estado: boolean;
 }
-
+export interface CreateRouter {
+	nombre: string;
+	ip: string;
+}
 export interface Sector {
 	id: string;
 	nombre: string;

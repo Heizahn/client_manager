@@ -1,5 +1,5 @@
 'use server';
-import type { Router, Sector } from '@/interfaces';
+import type { Router, Sector, CreateRouter } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
@@ -7,16 +7,46 @@ import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 export async function fetchRouters(): Promise<Router[]> {
 	noStore();
 	const supabase = await createClient();
-	const { data, error } = await supabase
-		.from('routers')
-		.select('id, nombre, ip, sector, clientes, estado')
-		.order('nombre');
 
-	if (error) {
-		console.log(error);
+	const consulta = await supabase.from('routers').select(`
+		id,
+		nombre,
+		ip,
+		clientes,
+		estado,
+		sectors(nombre)`);
+
+	if (consulta.error) {
+		console.log(consulta.error);
 	}
 
-	return data || [];
+	if (!consulta.data) {
+		return [];
+	}
+
+	type Router_DTO = {
+		id: string;
+		nombre: string;
+		ip: string;
+		clientes: number;
+		estado: boolean;
+		sectors: Sector_DTO;
+	};
+
+	interface Sector_DTO {
+		nombre: string;
+	}
+	// @ts-ignore
+	const routers: Router_DTO[] = consulta.data;
+
+	return routers.map((router) => {
+		const { sectors } = router;
+		const { nombre } = sectors;
+		return {
+			...router,
+			sector: nombre,
+		};
+	});
 }
 
 export async function fetchSectors(): Promise<Sector[]> {
@@ -54,5 +84,26 @@ export async function fetchCreateSector(nombre: string) {
 		return Error(error.message);
 	}
 	revalidatePath('/dashboard/sectors');
+	return 'Sector creado exitosamente';
+}
+
+export async function fetchCreateRouter({ nombre, ip }: CreateRouter) {
+	const supabase = await createClient();
+	const supabaseServer = await createClientServer();
+	const {
+		data: { user },
+	} = await supabaseServer.auth.getUser();
+
+	if (!user) {
+		throw new Error('No user found');
+	}
+
+	const { id } = user;
+	const { error } = await supabase.from('routers').insert({ nombre, ip, created_by: id });
+
+	if (error) {
+		return Error(error.message);
+	}
+	revalidatePath('/dashboard/routers');
 	return 'Sector creado exitosamente';
 }

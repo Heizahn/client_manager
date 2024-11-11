@@ -7,14 +7,27 @@ export async function fetchAllClients(): Promise<Client[]> {
 	const supabase = await createClient();
 	const { data, error } = await supabase
 		.from('clients')
-		.select('id, nombre, identificacion,telefono, sector, ipv4, plan, saldo, estado')
+		.select(
+			'id, nombre, identificacion,telefono, ipv4, plan, saldo, estado, sectors(nombre)',
+		)
 		.order('nombre');
 
 	if (error) {
 		console.log(error);
 	}
-
-	return data || [];
+	if (!data) {
+		return [];
+	}
+	//@ts-ignore
+	return data.map((client) => {
+		const { sectors } = client;
+		//@ts-ignore
+		const nombre = sectors?.nombre || '';
+		return {
+			...client,
+			sector: nombre,
+		};
+	});
 }
 
 export async function fetchSolventsClients(): Promise<Client[]> {
@@ -108,12 +121,42 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 	const { data, error } = await supabase
 		.from('clients')
 		.select(
-			'id, nombre, identificacion, telefono, sector, direccion, ipv4, plan, saldo, estado, router, created_at, dia_corte',
+			`
+			id, 
+			nombre, 
+			identificacion, 
+			telefono, 
+			sector, 
+			direccion, 
+			ipv4, 
+			plan,
+			saldo, 
+			estado, 
+			created_at, 
+			dia_corte, 
+			routers(
+				nombre
+				)
+		`,
 		)
 		.eq('id', id);
 
+	console.log(data);
 	if (error) {
 		console.log(error);
 	}
-	return data![0];
+
+	if (!data) {
+		throw new Error('Client not found');
+	}
+	//@ts-ignore
+	return data.map((client) => {
+		const { routers } = client;
+		//@ts-ignore
+		const nombre = routers?.nombre || '';
+		return {
+			...client,
+			router: nombre,
+		};
+	})[0];
 }
