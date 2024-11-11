@@ -25,3 +25,11 @@ export interface Router {
 	clientes: number;
 	estado: boolean;
 }
+
+export interface Sector {
+	id: string;
+	nombre: string;
+	created_at: string;
+	clientes: number;
+	estado: boolean;
+}
