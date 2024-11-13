@@ -1,4 +1,5 @@
 import RouterTable from '@/components/routers/routerTable';
+import ShowNewFormRouter from '@/components/routers/showNewFormRouter';
 
 export default function Page() {
 	return (
@@ -7,9 +8,7 @@ export default function Page() {
 				<header className='flex justify-between items-center px-4 py-1'>
 					<h2 className='text-center text-lg font-bold'>Routers</h2>
 					<div>
-						<button className='hover:underline underline-offset-4 px-3 transition-all duration-300 ease-linear'>
-							Nuevo Router
-						</button>
+						<ShowNewFormRouter />
 					</div>
 				</header>
 				<div className='mt-1 border-b-2 border-gray-700' />

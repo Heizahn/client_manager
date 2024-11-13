@@ -1,12 +1,10 @@
 'use client';
 
 import { Router } from '@/interfaces';
-import { useRouter } from 'next/navigation';
 
 export default function RouterRow({ router }: { router: Router }) {
-	const route = useRouter();
 	const handleClick = (id: string) => {
-		route.push(`/dashboard/router/${id}`);
+		alert(id);
 	};
 	return (
 		<>
