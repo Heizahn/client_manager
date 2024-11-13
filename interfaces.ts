@@ -28,6 +28,7 @@ export interface Router {
 export interface CreateRouter {
 	nombre: string;
 	ip: string;
+	sector: string;
 }
 export interface Sector {
 	id: string;

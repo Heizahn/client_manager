@@ -87,7 +87,23 @@ export async function fetchCreateSector(nombre: string) {
 	return 'Sector creado exitosamente';
 }
 
-export async function fetchCreateRouter({ nombre, ip }: CreateRouter) {
+export async function fetchSectorsCreateRouter() {
+	noStore();
+	const supabase = await createClient();
+	const { data, error }: { data: { id: string; nombre: string }[] | null; error: any } =
+		await supabase.from('sectors').select('id, nombre').order('nombre');
+
+	if (error) {
+		console.log(error);
+	}
+	if (!data) {
+		return [];
+	}
+
+	return data;
+}
+
+export async function fetchCreateRouter({ nombre, ip, sector }: CreateRouter) {
 	const supabase = await createClient();
 	const supabaseServer = await createClientServer();
 	const {
@@ -99,7 +115,9 @@ export async function fetchCreateRouter({ nombre, ip }: CreateRouter) {
 	}
 
 	const { id } = user;
-	const { error } = await supabase.from('routers').insert({ nombre, ip, created_by: id });
+	const { error } = await supabase
+		.from('routers')
+		.insert({ nombre, ip, sector_id: sector, created_by: id, estado: true });
 
 	if (error) {
 		return Error(error.message);

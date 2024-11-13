@@ -27,7 +27,7 @@ export default function NewService({
 		<>
 			<div className='absolute top-0 left-0 w-screen h-screen bg-black/50  flex items-center justify-center z-20'>
 				<Formik
-					initialValues={{ nombre: '', tipo: 'Fibra Óptica', costo: 0 }}
+					initialValues={{ nombre: '', tipo: '', costo: 0 }}
 					onSubmit={handlerSubmit}
 					validationSchema={schemaValidate}
 				>
@@ -66,8 +66,8 @@ export default function NewService({
 								as='select'
 								name='tipo'
 								className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
-								value='Fibra Óptica'
 							>
+								<option value=''>Seleccione...</option>
 								<option value='Fibra Óptica'>Fibra Óptica</option>
 								<option value='Inalámbrico'>Inalámbrico</option>
 							</Field>

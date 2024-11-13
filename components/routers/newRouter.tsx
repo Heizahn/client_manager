@@ -1,16 +1,32 @@
 'use client';
+import { fetchCreateRouter, fetchSectorsCreateRouter } from '@/lib/fetchDataSystems';
 import { schemaRouter } from './schemaRouter';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useEffect, useState } from 'react';
+import { CreateRouter } from '@/interfaces';
 
 export default function NewRouter({
 	setShow,
 }: {
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const handlerSubmit = (values: any) => {
-		console.log(values);
-		setShow(false);
+	const [sectors, setSectors] = useState<{ id: string; nombre: string }[]>([]);
+	const handlerSubmit = (values: CreateRouter) => {
+		fetchCreateRouter(values)
+			.then((res) => {
+				if (res) {
+					alert(res);
+					setShow(false);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
+
+	useEffect(() => {
+		fetchSectorsCreateRouter().then((res) => setSectors(res));
+	}, []);
 
 	return (
 		<div className='absolute top-0 left-0 w-screen h-screen bg-black/50  flex items-center justify-center z-20'>
@@ -59,21 +75,23 @@ export default function NewRouter({
 						/>
 					</div>
 					<div className='flex flex-col gap-1 mb-3'>
-						<label htmlFor='ip'>
+						<label htmlFor='sector'>
 							Sector:{' '}
 							<span className='text-red-500'>
-								<ErrorMessage name='ip' />
+								<ErrorMessage name='sector' />
 							</span>
 						</label>
 						<Field
 							as='select'
-							name='ip'
+							name='sector'
 							className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
-							value=''
 						>
 							<option value=''>Seleccione...</option>
-							<option value='Fibra Óptica'>Fibra Óptica</option>
-							<option value='Inalámbrico'>Inalámbrico</option>
+							{sectors.map((sector) => (
+								<option key={sector.id} value={sector.id}>
+									{sector.nombre}
+								</option>
+							))}
 						</Field>
 					</div>
 					<button
