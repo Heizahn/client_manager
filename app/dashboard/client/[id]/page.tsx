@@ -6,6 +6,7 @@ import type { ClientDetails } from '@/interfaces';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import NavCliente from '@/components/clientDetails/navCliente';
+import ServiceReceivable from '@/components/serviceReceivable/serviceReceivable';
 
 export default function Page() {
 	const { id } = useParams();
@@ -32,6 +33,12 @@ export default function Page() {
 
 			{/* Details */}
 			<Details client={client} showSection={selectedSection.details} />
+
+			{/* Invoices */}
+			<ServiceReceivable
+				clientId={id as string}
+				showSection={selectedSection.invoices}
+			/>
 		</div>
 	);
 }
