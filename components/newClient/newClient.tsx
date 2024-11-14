@@ -5,6 +5,7 @@ import { InitialValues, schemaValidate } from './schemaValidate';
 import { fetchDataSelect } from '@/lib/fetchDataSystems';
 import { DataSelect } from '@/interfaces';
 import { fetchCreateClient } from '@/lib/fetchData';
+import { useCountContextClients } from '@/context/countContext';
 
 export default function NewClient({
 	setShow,
@@ -14,6 +15,8 @@ export default function NewClient({
 	const [sectors, setSectors] = useState<DataSelect[]>([]);
 	const [routers, setRouters] = useState<DataSelect[]>([]);
 	const [services, setServices] = useState<DataSelect[]>([]);
+	const { Recount } = useCountContextClients();
+
 	const handlerSubmit = (values: any) => {
 		const data = {
 			nombre: values.nombre + values.apellido,
@@ -38,6 +41,9 @@ export default function NewClient({
 				if (err instanceof Error) {
 					alert(err.message);
 				}
+			})
+			.finally(() => {
+				Recount();
 			});
 	};
 
