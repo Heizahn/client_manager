@@ -34,14 +34,14 @@ export default function ClientRow({ client }: { client: Client }) {
 				<td
 					onClick={() => handleClick(client.id)}
 					className={`${
-						client.estado === 'Suspendido'
+						!client.estado
 							? 'text-red-500'
 							: client.saldo < 0
 							? 'text-orange-500'
 							: 'text-green-500'
 					}`}
 				>
-					{client.estado}
+					{!client.estado ? 'Suspendido' : 'Activo'}
 				</td>
 			</tr>
 		</>

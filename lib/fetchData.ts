@@ -1,6 +1,8 @@
-import { Client, ClientDetails } from '@/interfaces';
+'use server';
+import { Client, ClientDetails, CreateClient } from '@/interfaces';
 import { createClient } from './supabase/client';
-import { unstable_noStore as noStore } from 'next/cache';
+import { createClient as createClientServer } from './supabase/server';
+import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 
 export async function fetchAllClients(): Promise<Client[]> {
 	noStore();
@@ -74,7 +76,7 @@ export async function fetchDefaultersClients(): Promise<Client[]> {
 			'id, nombre, identificacion,telefono, ipv4, saldo, estado, sectors(nombre), services(nombre)',
 		)
 		.lt('saldo', 0)
-		.eq('estado', 'Activo')
+		.eq('estado', true)
 		.order('nombre');
 
 	if (error) {
@@ -106,7 +108,7 @@ export async function fetchSuspendedClients(): Promise<Client[]> {
 		.select(
 			'id, nombre, identificacion,telefono, ipv4, saldo, estado, sectors(nombre), services(nombre)',
 		)
-		.eq('estado', 'Suspendido')
+		.eq('estado', false)
 		.order('nombre');
 
 	if (error) {
@@ -158,7 +160,7 @@ export async function fetchCountDefaultersClients(): Promise<number> {
 		.from('clients')
 		.select('*', { count: 'exact', head: true })
 		.lt('saldo', 0)
-		.eq('estado', 'Activo');
+		.eq('estado', true);
 
 	return count || 0;
 }
@@ -169,7 +171,7 @@ export async function fetchCountSuspendedClients(): Promise<number> {
 	const { count } = await supabase
 		.from('clients')
 		.select('*', { count: 'exact', head: true })
-		.eq('estado', 'Suspendido');
+		.eq('estado', false);
 
 	return count || 0;
 }
@@ -228,4 +230,26 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 			sector,
 		};
 	})[0];
+}
+
+export async function fetchCreateClient(values: CreateClient): Promise<string> {
+	noStore();
+
+	const supabase = await createClient();
+	const supabaseServer = await createClientServer();
+	const {
+		data: { user },
+	} = await supabaseServer.auth.getUser();
+
+	if (!user) {
+		throw new Error('No user found');
+	}
+	const { id } = user;
+	const { error } = await supabase.from('clients').insert({ ...values, created_by: id });
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	revalidatePath('/dashboard/clients');
+	return 'Cliente creado exitosamente';
 }

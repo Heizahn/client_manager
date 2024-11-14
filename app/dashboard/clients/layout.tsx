@@ -2,6 +2,7 @@ import All from '@/components/filters/all';
 import Defaulters from '@/components/filters/defaulters';
 import Solvents from '@/components/filters/solvents';
 import Suspended from '@/components/filters/suspended';
+import ShowFormNewClient from '@/components/newClient/showFormNewClient';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
@@ -12,11 +13,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 					<Solvents />
 					<Defaulters />
 					<Suspended />
-				</div>
-				<div>
-					<button className='hover:underline underline-offset-4 px-3 transition-all duration-300 ease-linear'>
-						Nuevo Cliente
-					</button>
 				</div>
 			</div>
 			{children}

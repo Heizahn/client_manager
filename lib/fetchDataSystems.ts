@@ -1,5 +1,12 @@
 'use server';
-import type { Router, Sector, CreateRouter, Service, CreateService } from '@/interfaces';
+import type {
+	Router,
+	Sector,
+	CreateRouter,
+	Service,
+	CreateService,
+	DataSelect,
+} from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
@@ -87,22 +94,6 @@ export async function fetchCreateSector(nombre: string) {
 	return 'Sector creado exitosamente';
 }
 
-export async function fetchSectorsCreateRouter() {
-	noStore();
-	const supabase = await createClient();
-	const { data, error }: { data: { id: string; nombre: string }[] | null; error: any } =
-		await supabase.from('sectors').select('id, nombre').order('nombre');
-
-	if (error) {
-		console.log(error);
-	}
-	if (!data) {
-		return [];
-	}
-
-	return data;
-}
-
 export async function fetchCreateRouter({ nombre, ip, sector }: CreateRouter) {
 	const supabase = await createClient();
 	const supabaseServer = await createClientServer();
@@ -166,4 +157,25 @@ export async function fetchCreateService(values: CreateService) {
 	}
 	revalidatePath('/dashboard/services');
 	return 'Servicio creado exitosamente';
+}
+
+export async function fetchDataSelect(table: string): Promise<DataSelect[]> {
+	noStore();
+	const supabase = await createClient();
+	const order = table === 'services' ? 'tipo' : 'nombre';
+	const res = await supabase
+		.from(table)
+		.select(`id, nombre${table === 'services' ? ', tipo' : ''}`)
+		.order(order, { ascending: true });
+
+	if (res.error) {
+		console.log(res.error);
+	}
+	if (!res.data) {
+		return [];
+	}
+
+	//@ts-ignore
+	const data: DataSelect[] = res.data;
+	return data;
 }

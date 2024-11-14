@@ -1,13 +1,22 @@
-export interface Client {
-	id: string;
+export interface ClientOrigin {
 	nombre: string;
 	identificacion: string;
 	telefono: string;
 	sector: string;
 	ipv4: string;
 	plan: string;
+}
+
+export interface CreateClient extends ClientOrigin {
+	direccion: string;
+	router: string;
+	dia_corte: number;
+}
+
+export interface Client extends ClientOrigin {
+	id: string;
 	saldo: number;
-	estado: string;
+	estado: boolean;
 }
 
 export interface ClientDetails extends Client {
@@ -60,4 +69,10 @@ export interface CreateService {
 	nombre: string;
 	tipo: string;
 	costo: number;
+}
+
+export interface DataSelect {
+	id: string;
+	nombre: string;
+	tipo?: string;
 }

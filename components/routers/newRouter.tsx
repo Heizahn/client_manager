@@ -1,5 +1,5 @@
 'use client';
-import { fetchCreateRouter, fetchSectorsCreateRouter } from '@/lib/fetchDataSystems';
+import { fetchCreateRouter, fetchDataSelect } from '@/lib/fetchDataSystems';
 import { schemaRouter } from './schemaRouter';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useState } from 'react';
@@ -28,7 +28,7 @@ export default function NewRouter({
 	};
 
 	useEffect(() => {
-		fetchSectorsCreateRouter().then((res) => setSectors(res));
+		fetchDataSelect('sectors').then((res) => setSectors(res));
 	}, []);
 
 	return (
@@ -67,7 +67,6 @@ export default function NewRouter({
 							name='nombre'
 							placeholder='RB_VEGAS'
 							onInput={(e: any) =>
-								// remover los espacios convertir a mayusculas y solo permitir caracteres alfanuméricos y pisos
 								(e.target.value = e.target.value
 									.toUpperCase()
 									.replace(/[^A-Z0-9\_]/g, ''))
