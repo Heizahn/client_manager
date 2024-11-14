@@ -15,7 +15,7 @@ export default function ClientDetails({
 	}
 	return (
 		showSection && (
-			<div className='mt-3 flex flex-wrap bg-gray-800 px-4 py-8 rounded-md'>
+			<div className='flex flex-wrap bg-gray-800 px-4 pb-8 pt-4 rounded-b-md'>
 				<div className='w-72 lg:w-1/3 px-4 py-2 flex flex-col gap-1'>
 					<DetailContainer title='Datos Personales'>
 						<Detail title='Nombre:' label={client.nombre} />
