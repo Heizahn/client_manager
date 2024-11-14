@@ -37,21 +37,16 @@ export function CountProviderClients({ children }: { children: React.ReactNode }
 	const [clientsCountDefaulters, setClientsCountDefaulters] = useState(0);
 	const [clientsCountSuspended, setClientsCountSuspended] = useState(0);
 
-	const Recount = async () => {
-		const countAll = await fetchCountClients();
-		const countSolvents = await fetchCountSolventsClients();
-		const countDefaulters = await fetchCountDefaultersClients();
-		const countSuspended = await fetchCountSuspendedClients();
-
-		setClientsCountAll(countAll);
-		setClientsCountSolvents(countSolvents);
-		setClientsCountDefaulters(countDefaulters);
-		setClientsCountSuspended(countSuspended);
+	const Recount = () => {
+		fetchCountClients().then((count) => setClientsCountAll(count));
+		fetchCountSolventsClients().then((count) => setClientsCountSolvents(count));
+		fetchCountDefaultersClients().then((count) => setClientsCountDefaulters(count));
+		fetchCountSuspendedClients().then((count) => setClientsCountSuspended(count));
 	};
 
 	useEffect(() => {
 		Recount();
-	}, []);
+	});
 
 	return (
 		<CountContextClients.Provider
