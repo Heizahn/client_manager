@@ -30,6 +30,15 @@ export interface CreateRouter {
 	ip: string;
 	sector: string;
 }
+
+export interface CreateRouterSchema {
+	nombre: string;
+	sector: string;
+	part1: string;
+	part2: string;
+	part3: string;
+	part4: string;
+}
 export interface Sector {
 	id: string;
 	nombre: string;

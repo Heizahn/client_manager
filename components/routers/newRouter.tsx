@@ -3,7 +3,7 @@ import { fetchCreateRouter, fetchSectorsCreateRouter } from '@/lib/fetchDataSyst
 import { schemaRouter } from './schemaRouter';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useState } from 'react';
-import { CreateRouter } from '@/interfaces';
+import { CreateRouterSchema } from '@/interfaces';
 
 export default function NewRouter({
 	setShow,
@@ -11,8 +11,11 @@ export default function NewRouter({
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [sectors, setSectors] = useState<{ id: string; nombre: string }[]>([]);
-	const handlerSubmit = (values: CreateRouter) => {
-		fetchCreateRouter(values)
+	const handlerSubmit = (values: CreateRouterSchema) => {
+		fetchCreateRouter({
+			...values,
+			ip: `${values.part1}.${values.part2}.${values.part3}.${values.part4}`,
+		})
 			.then((res) => {
 				if (res) {
 					alert(res);
@@ -31,7 +34,14 @@ export default function NewRouter({
 	return (
 		<div className='absolute top-0 left-0 w-screen h-screen bg-black/50  flex items-center justify-center z-20'>
 			<Formik
-				initialValues={{ nombre: '', ip: '', sector: '' }}
+				initialValues={{
+					nombre: '',
+					sector: '',
+					part1: '',
+					part2: '',
+					part3: '',
+					part4: '',
+				}}
 				onSubmit={handlerSubmit}
 				validationSchema={schemaRouter}
 			>
@@ -56,23 +66,159 @@ export default function NewRouter({
 							type='text'
 							name='nombre'
 							placeholder='RB_VEGAS'
+							onInput={(e: any) =>
+								// remover los espacios convertir a mayusculas y solo permitir caracteres alfanuméricos y pisos
+								(e.target.value = e.target.value
+									.toUpperCase()
+									.replace(/[^A-Z0-9\_]/g, ''))
+							}
 							className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
 						/>
 					</div>
 
 					<div className='flex flex-col gap-1 mb-3'>
-						<label htmlFor='ip'>
+						<label>
 							IP:{' '}
 							<span className='text-red-500'>
 								<ErrorMessage name='ip' />
 							</span>
 						</label>
-						<Field
-							type='text'
-							name='ip'
-							placeholder='192.168.1.1'
-							className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
-						/>
+						<div className='flex items-end gap-0.5'>
+							<div className='flex flex-col'>
+								<span className='text-red-500'>
+									<ErrorMessage name='part1' />
+								</span>
+								<Field
+									name='part1'
+									className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
+									placeholder='192'
+									maxLength={3}
+									minLength={1}
+									id='part1'
+									onInput={(e: any) =>
+										(e.target.value = e.target.value.replace(
+											/[^0-9]/g,
+											'',
+										))
+									}
+									onKeyDown={(e: any) => {
+										if (
+											e.key === '.' &&
+											e.target.value.length >= e.target.minLength
+										) {
+											document.getElementById('part2')?.focus();
+										} else if (e.key === '.' && e.target.value === '') {
+											e.preventDefault();
+										}
+									}}
+									onKeyUp={(e: any) => {
+										if (e.target.value.length === 3) {
+											e.preventDefault();
+											document.getElementById('part2')?.focus();
+										}
+									}}
+								/>
+							</div>
+							.
+							<div className='flex flex-col'>
+								<span className='text-red-500'>
+									<ErrorMessage name='part2' />
+								</span>
+								<Field
+									name='part2'
+									className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
+									placeholder='168'
+									maxLength={3}
+									minLength={1}
+									id='part2'
+									onInput={(e: any) =>
+										(e.target.value = e.target.value.replace(
+											/[^0-9]/g,
+											'',
+										))
+									}
+									onKeyDown={(e: any) => {
+										if (e.key === '.' && e.target.value.length >= 1) {
+											document.getElementById('part3')?.focus();
+										} else if (e.key === '.' && e.target.value === '') {
+											e.preventDefault();
+										}
+									}}
+									onKeyUp={(e: any) => {
+										if (e.target.value.length >= 3) {
+											document.getElementById('part3')?.focus();
+										}
+										if (e.key === 'Backspace' && e.target.value === '') {
+											document.getElementById('part1')?.focus();
+										}
+									}}
+								/>
+							</div>
+							.
+							<div className='flex flex-col'>
+								<span className='text-red-500'>
+									<ErrorMessage name='part3' />
+								</span>
+								<Field
+									name='part3'
+									className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
+									placeholder='1'
+									maxLength={3}
+									minLength={1}
+									id='part3'
+									onInput={(e: any) =>
+										(e.target.value = e.target.value.replace(
+											/[^0-9]/g,
+											'',
+										))
+									}
+									onKeyDown={(e: any) => {
+										if (
+											e.key === '.' &&
+											e.target.value.length >= e.target.minLength
+										) {
+											document.getElementById('part4')?.focus();
+										} else if (e.key === '.' && e.target.value === '') {
+											e.preventDefault();
+										}
+									}}
+									onKeyUp={(e: any) => {
+										if (e.target.value.length === 3) {
+											e.preventDefault();
+											document.getElementById('part4')?.focus();
+										}
+										if (e.key === 'Backspace' && e.target.value === '') {
+											document.getElementById('part2')?.focus();
+										}
+									}}
+								/>
+							</div>
+							.
+							<div className='flex flex-col'>
+								<span className='text-red-500'>
+									<ErrorMessage name='part4' />
+								</span>
+								<Field
+									name='part4'
+									className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
+									placeholder='1'
+									maxLength={3}
+									minLength={1}
+									id='part4'
+									onInput={(e: any) =>
+										(e.target.value = e.target.value.replace(
+											/[^0-9]/g,
+											'',
+										))
+									}
+									onKeyUp={(e: any) => {
+										if (e.key === 'Backspace' && e.target.value === '') {
+											document.getElementById('part3')?.focus();
+										}
+									}}
+								/>
+							</div>
+						</div>
 					</div>
 					<div className='flex flex-col gap-1 mb-3'>
 						<label htmlFor='sector'>
