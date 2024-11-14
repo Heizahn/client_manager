@@ -66,9 +66,9 @@ export default function ClientDetails({
 					<DetailContainer title='Estado'>
 						<Detail
 							title='Estado:'
-							label={client.estado}
+							label={`${client.estado ? 'Activo' : 'Suspendido'}`}
 							className={
-								client.estado === 'Suspendido'
+								!client.estado
 									? 'text-red-500'
 									: client.saldo < 0
 									? 'text-orange-500'
