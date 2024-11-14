@@ -1,30 +1,32 @@
 'use client';
 
+import { ServiceReceivable } from '@/interfaces';
+import { formatDate } from '../dateFormat';
+
 export default function ServiceReceivableRow({
-	service_receivable,
+	serviceReceivable,
 }: {
-	service_receivable: {
-		id: string;
-		motivo: string;
-		created_at: string;
-		monto: number;
-		deuda: number;
-		estado: boolean;
-	};
+	serviceReceivable: ServiceReceivable;
 }) {
 	return (
 		<>
 			<tr className='border-t border-gray-400 hover:cursor-pointer hover:bg-gray-700 transition-all duration-300 ease-linear'>
-				<td className='text-left py-1 pl-4'>{service_receivable.motivo}</td>
-				<td>{service_receivable.created_at}</td>
-				<td>{service_receivable.monto}</td>
-				<td>{service_receivable.deuda}</td>
+				<td className='text-left py-1 pl-4'>{serviceReceivable.motivo}</td>
+				<td>{formatDate(new Date(serviceReceivable.created_at))}</td>
+				<td>{(serviceReceivable.monto / 100).toFixed(2)}</td>
 				<td
 					className={`${
-						!service_receivable.estado ? 'text-red-500' : 'text-green-500'
+						serviceReceivable.deuda < 0 ? 'text-red-500' : 'text-green-500'
 					}`}
 				>
-					{service_receivable.estado ? 'Activo' : 'Inactivo'}
+					{(serviceReceivable.deuda / 100).toFixed(2)}
+				</td>
+				<td
+					className={`${
+						!serviceReceivable.estado ? 'text-red-500' : 'text-green-500'
+					}`}
+				>
+					{serviceReceivable.estado ? 'Activo' : 'Anulado'}
 				</td>
 			</tr>
 		</>

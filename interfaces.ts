@@ -76,3 +76,12 @@ export interface DataSelect {
 	nombre: string;
 	tipo?: string;
 }
+
+export interface ServiceReceivable {
+	id: string;
+	motivo: string;
+	created_at: string;
+	monto: number;
+	deuda: number;
+	estado: boolean;
+}

@@ -1,32 +1,12 @@
+'use client';
+import { ServiceReceivable } from '@/interfaces';
 import ServiceReceivableRow from './serviceReceivableRow';
 
-export default function ServiceReceivableTable() {
-	const servicesReceivable = [
-		{
-			id: '1',
-			motivo: 'Servicio de Cobranza',
-			created_at: '2023-03-01',
-			monto: 100,
-			deuda: 0,
-			estado: true,
-		},
-		{
-			id: '2',
-			motivo: 'Servicio de Cobranza',
-			created_at: '2023-03-01',
-			monto: 100,
-			deuda: 0,
-			estado: true,
-		},
-		{
-			id: '3',
-			motivo: 'Servicio de Cobranza',
-			created_at: '2023-03-01',
-			monto: 100,
-			deuda: 0,
-			estado: true,
-		},
-	];
+export default function ServiceReceivableTable({
+	servicesReceivables,
+}: {
+	servicesReceivables: ServiceReceivable[];
+}) {
 	return (
 		<div className='w-full max-h-[calc(100vh_-_7.5rem)] overflow-y-auto scrollbar-none rounded-b-md'>
 			<table className='w-full bg-gray-800 '>
@@ -40,10 +20,10 @@ export default function ServiceReceivableTable() {
 					</tr>
 				</thead>
 				<tbody>
-					{servicesReceivable.map((serviceReceivable) => (
+					{servicesReceivables.map((serviceReceivable) => (
 						<ServiceReceivableRow
 							key={serviceReceivable.id}
-							service_receivable={serviceReceivable}
+							serviceReceivable={serviceReceivable}
 						/>
 					))}
 				</tbody>

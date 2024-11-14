@@ -1,5 +1,5 @@
 'use server';
-import { Client, ClientDetails, CreateClient } from '@/interfaces';
+import { Client, ClientDetails, CreateClient, ServiceReceivable } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
@@ -252,4 +252,24 @@ export async function fetchCreateClient(values: CreateClient): Promise<string> {
 
 	revalidatePath('/dashboard/clients');
 	return 'Cliente creado exitosamente';
+}
+
+export async function fetchServicesReceivable(clientId: string): Promise<ServiceReceivable[]> {
+	noStore();
+	const supabase = await createClient();
+
+	const { data, error } = await supabase
+		.from('service_receivable')
+		.select('id, motivo, created_at, monto, deuda, estado')
+		.eq('cliente', clientId);
+
+	if (error) {
+		console.log(error);
+	}
+
+	if (!data) {
+		return [];
+	}
+
+	return data;
 }
