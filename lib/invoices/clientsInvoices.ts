@@ -1,5 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
-import { months } from './months';
+
+type services = {
+	nombre_service: string;
+	costo: number;
+};
+
+type client = {
+	id: string;
+	services: services;
+};
 
 export async function ClientsForServiceReceivable() {
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -10,38 +19,26 @@ export async function ClientsForServiceReceivable() {
 	}
 
 	try {
-		const supabase = createClient(supabaseUrl, supabaseAnonKey);
-		const {
-			data,
-			error,
-		}: {
-			data: { id: string; services: { nombre: string; costo: number } }[] | null;
-			error: Error | null;
-		} = await supabase.from('clients').select('id, services(nombre, costo)');
+		const supabase = createClient<{ clients: client; services: services }>(
+			supabaseUrl,
+			supabaseAnonKey,
+		);
+		const { data, error } = await supabase
+			.from('clients')
+			.select('id, services(nombre_service, costo)');
 
 		if (error) {
-			console.log(error.message);
+			throw new Error(error.message);
 		}
 
 		if (!data) {
 			throw new Error('No client found');
 		}
 
-		const clients = data.map((client) => {
-			const { services } = client;
-			const motivo = `${services.nombre} Residencial - `;
-			const monto = services.costo;
-
-			return {
-				id: client.id,
-				motivo: motivo + months[new Date().getMonth()],
-				monto,
-				deuda: -monto,
-			};
-		});
-
-		return clients;
+		return data as unknown as client[];
 	} catch (error) {
-		console.log(error);
+		if (error instanceof Error) {
+			console.error(error.message);
+		}
 	}
 }

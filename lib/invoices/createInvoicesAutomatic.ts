@@ -1,12 +1,27 @@
 import { ClientsForServiceReceivable } from './clientsInvoices';
+import { createInvoice } from './createInvoice';
+import { months } from './months';
 
 export async function createInvoicesAutomatic() {
 	{
 		const clients = await ClientsForServiceReceivable();
-		if (!clients) {
+
+		if (!clients || clients.length === 0) {
+			console.error('No client found');
 			return;
 		}
 
-		console.log(clients);
+		for (const client of clients) {
+			const title = `${client.services?.nombre_service} Residencial - `;
+
+			await createInvoice({
+				clientId: client.id,
+				motivo: title + months[new Date().getMonth()],
+				monto: client.services?.costo,
+				deuda: -client.services?.costo,
+			})
+				.then((res) => console.info(res))
+				.catch((err) => console.error(err.message));
+		}
 	}
 }

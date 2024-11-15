@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import './server/jobs';
 
 const nextConfig: NextConfig = {
 	/* config options here */
