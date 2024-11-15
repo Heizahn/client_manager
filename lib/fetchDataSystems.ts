@@ -5,7 +5,6 @@ import type {
 	CreateRouter,
 	Service,
 	CreateService,
-	DataSelect,
 	DataSelectSector,
 	DataSelectRouter,
 	DataSelectService,
@@ -107,16 +106,16 @@ export async function fetchCreateRouter({ nombre, ip, sector }: CreateRouter) {
 	return 'Sector creado exitosamente';
 }
 
-export async function fetchServices(): Promise<Service[]> {
+export async function fetchServices(): Promise<Service[] | string> {
 	noStore();
 	const supabase = await createClient();
 	const { data, error } = await supabase
 		.from('services')
-		.select('id, nombre, tipo, clientes, costo, estado')
+		.select('id, nombre_service, tipo, clientes, costo, estado')
 		.order('tipo');
 
 	if (error) {
-		console.log(error);
+		return error.message;
 	}
 	if (!data) {
 		return [];

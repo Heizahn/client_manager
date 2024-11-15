@@ -1,6 +1,7 @@
 import type { Service } from '@/interfaces';
 import { fetchServices } from '@/lib/fetchDataSystems';
 import ServiceRow from './serviceRow';
+import ErrorMessage from '../error';
 
 export default async function ServiceTable() {
 	const services = await fetchServices();
@@ -18,9 +19,17 @@ export default async function ServiceTable() {
 					</tr>
 				</thead>
 				<tbody>
-					{services.map((service: Service) => (
-						<ServiceRow key={service.id} service={service} />
-					))}
+					{typeof services !== 'string' ? (
+						services.map((service: Service) => (
+							<ServiceRow key={service.id} service={service} />
+						))
+					) : (
+						<tr>
+							<td>
+								<ErrorMessage error={services} />
+							</td>
+						</tr>
+					)}
 				</tbody>
 			</table>
 		</div>

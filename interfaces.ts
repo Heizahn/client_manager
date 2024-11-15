@@ -56,10 +56,7 @@ export interface Sector {
 	estado: boolean;
 }
 
-export interface Service {
-	id: string;
-	nombre: string;
-	tipo: string;
+export interface Service extends DataSelectService {
 	clientes: number;
 	costo: number;
 	estado: boolean;

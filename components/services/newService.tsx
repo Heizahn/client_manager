@@ -4,22 +4,32 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { schemaValidate } from './schemaValidate';
 import { CreateService } from '@/interfaces';
 import { fetchCreateService } from '@/lib/fetchDataSystems';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
+import ButtonSubmit from '../buttonSubmit';
 
 export default function NewService({
 	setShow,
 }: {
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+	const [loading, setLoading] = useState(false);
+	const [loadService, setLoadService] = useState(false);
+
 	const handlerSubmit = (values: CreateService) => {
+		setLoading(true);
 		fetchCreateService(values)
 			.then((res) => {
-				if (res) {
-					alert(res);
+				if (typeof res === 'string') {
+					toast.success(res);
 					setShow(false);
 				}
 			})
 			.catch((err) => {
-				console.log(err);
+				toast.error(err.message);
+			})
+			.finally(() => {
+				setLoading(false);
 			});
 	};
 
@@ -89,12 +99,7 @@ export default function NewService({
 								className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
 							/>
 						</div>
-						<button
-							type='submit'
-							className='mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear'
-						>
-							Crear
-						</button>
+						<ButtonSubmit loading={loading}>Crear</ButtonSubmit>
 					</Form>
 				</Formik>
 			</div>
