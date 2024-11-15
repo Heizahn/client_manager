@@ -2,23 +2,28 @@
 import { useStoreClientView } from '@/store/storeClientView';
 
 export default function NavCliente() {
-	const { details, invoices, payments, statistics, setSelectedSection } = useStoreClientView(
-		(state) => state,
-	);
+	const {
+		details,
+		invoices,
+		payments,
+		statistics,
+		setViewDetails,
+		setViewInvoices,
+		setViewPayments,
+		setViewStatistics,
+	} = useStoreClientView((state) => state);
 	return (
 		<nav className='px-4 py-2 mt-4 '>
 			<ul className='flex flex-row gap-8 text-base font-bold mb-2'>
 				<li>
 					<button
 						type='button'
-						onClick={() =>
-							setSelectedSection({
-								details: true,
-								invoices: false,
-								payments: false,
-								statistics: false,
-							})
-						}
+						onClick={() => {
+							setViewInvoices(false);
+							setViewPayments(false);
+							setViewStatistics(false);
+							setViewDetails(true);
+						}}
 						className={
 							details
 								? 'underline underline-offset-8'
@@ -31,14 +36,12 @@ export default function NavCliente() {
 				<li>
 					<button
 						type='button'
-						onClick={() =>
-							setSelectedSection({
-								details: false,
-								invoices: true,
-								payments: false,
-								statistics: false,
-							})
-						}
+						onClick={() => {
+							setViewDetails(false);
+							setViewPayments(false);
+							setViewStatistics(false);
+							setViewInvoices(true);
+						}}
 						className={
 							invoices
 								? 'underline underline-offset-8'
@@ -51,14 +54,12 @@ export default function NavCliente() {
 				<li>
 					<button
 						type='button'
-						onClick={() =>
-							setSelectedSection({
-								details: false,
-								invoices: false,
-								payments: true,
-								statistics: false,
-							})
-						}
+						onClick={() => {
+							setViewInvoices(false);
+							setViewStatistics(false);
+							setViewDetails(false);
+							setViewPayments(true);
+						}}
 						className={
 							payments
 								? 'underline underline-offset-8'
@@ -71,14 +72,12 @@ export default function NavCliente() {
 				<li>
 					<button
 						type='button'
-						onClick={() =>
-							setSelectedSection({
-								details: false,
-								invoices: false,
-								payments: false,
-								statistics: true,
-							})
-						}
+						onClick={() => {
+							setViewInvoices(false);
+							setViewPayments(false);
+							setViewDetails(false);
+							setViewStatistics(true);
+						}}
 						className={
 							statistics
 								? 'underline underline-offset-8'

@@ -21,12 +21,9 @@ export default function ClientDetailsById({ clientId }: { clientId: string }) {
 			.catch((err) => toast.error(err.message));
 	}, [clientId]);
 
-	if (!client) {
-		return <SkeletonDetail />;
-	}
-
 	return (
-		details && (
+		details &&
+		(client ? (
 			<div className='flex flex-wrap bg-gray-800 px-4 pb-8 pt-4 rounded-b-md'>
 				<div className='w-72 lg:w-1/3 px-4 py-2 flex flex-col gap-1'>
 					<DetailContainer title='Datos Personales'>
@@ -94,6 +91,8 @@ export default function ClientDetailsById({ clientId }: { clientId: string }) {
 					</DetailContainer>
 				</div>
 			</div>
-		)
+		) : (
+			<SkeletonDetail />
+		))
 	);
 }

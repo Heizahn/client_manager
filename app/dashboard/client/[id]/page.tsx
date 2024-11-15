@@ -1,5 +1,6 @@
 import ClientDetailsById from '@/components/clientDetails/clientDetails';
 import HeaderClient from '@/components/clientDetails/headerClient';
+import ServiceReceivable from '@/components/serviceReceivable/serviceReceivable';
 
 export default async function Page({ params }: { params: { id: string } }) {
 	const { id } = await params;
@@ -11,14 +12,12 @@ export default async function Page({ params }: { params: { id: string } }) {
 		<>
 			<div className='flex flex-col md:overflow-hidden'>
 				<HeaderClient clientId={id as string} />
+
 				{/* Details */}
 				<ClientDetailsById clientId={id as string} />
 
 				{/* Invoices */}
-				{/* <ServiceReceivable
-					clientId={id as string}
-					showSection={selectedSection.invoices}
-					/> */}
+				<ServiceReceivable clientId={id as string} />
 			</div>
 		</>
 	);
