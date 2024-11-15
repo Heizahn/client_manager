@@ -3,6 +3,7 @@
 import { HOST_WS } from '@/ENV';
 import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function Page() {
 	const [message, setMessage] = useState({
@@ -32,7 +33,11 @@ export default function Page() {
 				console.log(data);
 			})
 			.catch((err) => {
-				console.log('err', err);
+				if (err.message === 'Failed to fetch') {
+					toast.error('Error al conectar con la API de Whatsapp');
+					return;
+				}
+				toast.error(err.message);
 			});
 	};
 
@@ -43,6 +48,13 @@ export default function Page() {
 				if (data !== 'Authenticated') {
 					redirect('/dashboard/login_whatsapp');
 				}
+			})
+			.catch((err) => {
+				if (err.message === 'Failed to fetch') {
+					toast.error('Error al conectar con la API de Whatsapp');
+					return;
+				}
+				toast.error(err.message);
 			});
 	}, []);
 	return (

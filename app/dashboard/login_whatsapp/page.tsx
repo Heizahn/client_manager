@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { redirect } from 'next/navigation';
 import { HOST_WS } from '@/ENV';
+import { toast } from 'react-toastify';
 
 export default function Page() {
 	const [qrCode, setQrCode] = useState('');
@@ -30,6 +31,9 @@ export default function Page() {
 				if (data === 'Authenticated') {
 					redirect('/dashboard/send_whatsapp');
 				}
+			})
+			.catch((err) => {
+				toast.error(err.message);
 			});
 	}, [qrCode, socket]);
 
