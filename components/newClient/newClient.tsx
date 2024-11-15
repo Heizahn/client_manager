@@ -2,23 +2,31 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { InitialValues, schemaValidate, ClientValues } from './schemaValidate';
-import { fetchDataSelect } from '@/lib/fetchDataSystems';
-import { DataSelect } from '@/interfaces';
+import {
+	fetchDataSelectSector,
+	fetchDataSelectService,
+	fetchDataSelectRouter,
+} from '@/lib/fetchDataSystems';
+import { DataSelectRouter, DataSelectSector, DataSelectService } from '@/interfaces';
 import { fetchCreateClient } from '@/lib/fetchData';
 import { useStore } from '@/store/storeCount';
+import { toast } from 'react-toastify';
+import ButtonSubmit from '../buttonSubmit';
 
 export default function NewClient({
 	setShow,
 }: {
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const [sectors, setSectors] = useState<DataSelect[]>([]);
-	const [routers, setRouters] = useState<DataSelect[]>([]);
-	const [services, setServices] = useState<DataSelect[]>([]);
+	const [sectors, setSectors] = useState<DataSelectSector[]>([]);
+	const [routers, setRouters] = useState<DataSelectRouter[]>([]);
+	const [services, setServices] = useState<DataSelectService[]>([]);
+	const [loading, setLoading] = useState(false);
 
 	const { Recount } = useStore((state) => state);
 
 	const handlerSubmit = (values: ClientValues) => {
+		setLoading(true);
 		const data = {
 			nombre: values.nombre + ' ' + values.apellido,
 			telefono: values.telefono,
@@ -34,24 +42,31 @@ export default function NewClient({
 		fetchCreateClient(data)
 			.then((res) => {
 				if (res) {
-					alert(res);
+					toast.success(res);
 					setShow(false);
 				}
 			})
 			.catch((err) => {
 				if (err instanceof Error) {
-					alert(err.message);
+					toast.error(err.message);
 				}
 			})
 			.finally(() => {
 				Recount();
+				setLoading(false);
 			});
 	};
 
 	useEffect(() => {
-		fetchDataSelect('sectors').then((res) => setSectors(res));
-		fetchDataSelect('routers').then((res) => setRouters(res));
-		fetchDataSelect('services').then((res) => setServices(res));
+		fetchDataSelectSector()
+			.then((res) => setSectors(res))
+			.catch((err) => toast.error(err.message));
+		fetchDataSelectRouter()
+			.then((res) => setRouters(res))
+			.catch((err) => toast.error(err.message));
+		fetchDataSelectService()
+			.then((res) => setServices(res))
+			.catch((err) => toast.error(err.message));
 	}, []);
 
 	return (
@@ -190,7 +205,7 @@ export default function NewClient({
 										<option value=''>Seleccione...</option>
 										{sectors.map((sector) => (
 											<option key={sector.id} value={sector.id}>
-												{sector.nombre}
+												{sector.nombre_sector}
 											</option>
 										))}
 									</>
@@ -402,9 +417,9 @@ export default function NewClient({
 								{services.length > 0 ? (
 									<>
 										<option value=''>Seleccione...</option>
-										{services.map((service: DataSelect) => (
+										{services.map((service) => (
 											<option key={service.id} value={service.id}>
-												{service.tipo} {service.nombre}
+												{service.tipo} {service.nombre_service}
 											</option>
 										))}
 									</>
@@ -430,12 +445,7 @@ export default function NewClient({
 							</Field>
 						</div>
 					</div>
-					<button
-						type='submit'
-						className='mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear'
-					>
-						Crear
-					</button>
+					<ButtonSubmit loading={loading}>Crear</ButtonSubmit>
 				</Form>
 			</Formik>
 		</div>

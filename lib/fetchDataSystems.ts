@@ -157,7 +157,7 @@ export async function fetchDataSelectRouter(): Promise<DataSelectRouter[]> {
 		.order('nombre', { ascending: true });
 
 	if (res.error) {
-		console.log(res.error);
+		throw new Error('Error al obtener los routers');
 	}
 	if (!res.data) {
 		return [];
@@ -176,7 +176,7 @@ export async function fetchDataSelectSector(): Promise<DataSelectSector[]> {
 		.order('nombre_sector', { ascending: true });
 
 	if (res.error) {
-		console.log(res.error);
+		throw new Error('Error al obtener los sectores');
 	}
 	if (!res.data) {
 		return [];
@@ -190,11 +190,11 @@ export async function fetchDataSelectService(): Promise<DataSelectService[]> {
 	const supabase = await createClient();
 	const res = await supabase
 		.from('services')
-		.select(`id, nombre, tipo`)
+		.select(`id, nombre_service, tipo`)
 		.order('tipo', { ascending: true });
 
 	if (res.error) {
-		console.log(res.error);
+		throw new Error('Error al obtener los servicios');
 	}
 	if (!res.data) {
 		return [];
