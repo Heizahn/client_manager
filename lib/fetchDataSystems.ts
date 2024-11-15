@@ -35,14 +35,7 @@ export async function fetchRouters(): Promise<Router[]> {
 
 	const routers = consulta.data;
 
-	return routers.map((router: any) => {
-		const { sectors } = router;
-		const sector = sectors.nombre_sector;
-		return {
-			...router,
-			sector,
-		};
-	});
+	return routers as unknown as Router[];
 }
 
 export async function fetchSectors(): Promise<Sector[] | string> {

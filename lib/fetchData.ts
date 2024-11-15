@@ -1,15 +1,9 @@
 'use server';
-import {
-	Client,
-	ClientDetails,
-	ClientDetailsHeader,
-	CreateClient,
-	ServiceReceivable,
-} from '@/interfaces';
-import { createClient, createClientTables } from './supabase/client';
+import { ClientDetailsHeader, CreateClient, ServiceReceivable } from '@/interfaces';
+import { createClient, createClientDetails, createClientTables } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
-import { ClientType } from './typesConsultas';
+import { ClientDetailsType, ClientType } from './typesConsultas';
 
 export async function fetchAllClients(): Promise<ClientType[]> {
 	noStore();
@@ -140,9 +134,9 @@ export async function fetchCountSuspendedClients(): Promise<number> {
 	return count || 0;
 }
 
-export async function fetchClientById(id: string): Promise<ClientDetails> {
+export async function fetchClientById(id: string): Promise<ClientDetailsType> {
 	noStore();
-	const supabase = await createClient();
+	const supabase = await createClientDetails();
 	const { data, error } = await supabase
 		.from('clients')
 		.select(
@@ -174,23 +168,12 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 		throw new Error('Cliente no valido');
 	}
 
-	return data.map((client: any) => {
-		const { routers, services, sectors } = client;
-		const router = routers?.nombre;
-		const service = services?.nombre_service;
-		const sector = sectors?.nombre_sector;
-		return {
-			...client,
-			router,
-			plan: service,
-			sector,
-		};
-	})[0];
+	return data[0] as unknown as ClientDetailsType;
 }
 
 export async function fetchClientHeaderById(id: string): Promise<ClientDetailsHeader> {
 	noStore();
-	const supabase = await createClient();
+	const supabase = await createClientDetails();
 	const { data, error } = await supabase
 		.from('clients')
 		.select('id, nombre, saldo, estado, direccion')

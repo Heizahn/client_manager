@@ -1,6 +1,5 @@
 'use client';
 
-import { ClientDetails } from '@/interfaces';
 import Detail from './detail';
 import DetailContainer from './detailContainer';
 import { formatDate } from '../dateFormat';
@@ -10,10 +9,11 @@ import { useEffect, useState } from 'react';
 import { fetchClientById } from '@/lib/fetchData';
 import { toast } from 'react-toastify';
 import SkeletonDetail from './skeletonDetail';
+import { ClientDetailsType } from '@/lib/typesConsultas';
 
 export default function ClientDetailsById({ clientId }: { clientId: string }) {
 	const { details } = useStoreClientView();
-	const [client, setClient] = useState<ClientDetails | null>(null);
+	const [client, setClient] = useState<ClientDetailsType | null>(null);
 
 	useEffect(() => {
 		fetchClientById(clientId)
@@ -42,7 +42,10 @@ export default function ClientDetailsById({ clientId }: { clientId: string }) {
 				</div>
 				<div className='w-72 lg:w-1/3 px-4 py-2'>
 					<DetailContainer title='Ubicación'>
-						<Detail title='Sector:' label={client.sector} />
+						<Detail
+							title='Sector:'
+							label={client.sectors?.nombre_sector as string}
+						/>
 						<Detail
 							title='Dirección:'
 							label={client.direccion}
@@ -52,13 +55,16 @@ export default function ClientDetailsById({ clientId }: { clientId: string }) {
 				</div>
 				<div className='w-72 lg:w-1/3 px-4 py-2'>
 					<DetailContainer title='Servicios'>
-						<Detail title='Router:' label={client.router} />
+						<Detail title='Router:' label={client.routers?.nombre as string} />
 						<Detail
 							title='IPV4:'
 							label={client.ipv4}
 							href={`http://${client.ipv4}`}
 						/>
-						<Detail title='Plan:' label={client.plan} />
+						<Detail
+							title='Plan:'
+							label={client.services?.nombre_service as string}
+						/>
 					</DetailContainer>
 				</div>
 				<div className='w-72 lg:w-1/3 px-4 py-2'>

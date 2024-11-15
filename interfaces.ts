@@ -1,3 +1,5 @@
+import { SectorType } from './lib/typesConsultas';
+
 export interface ClientOrigin {
 	nombre: string;
 	identificacion: string;
@@ -38,7 +40,7 @@ export interface Router {
 	id: string;
 	nombre: string;
 	ip: string;
-	sector: string;
+	sectors: SectorType | null; // Relación con tabla `sectors`
 	clientes: number;
 	estado: boolean;
 }
