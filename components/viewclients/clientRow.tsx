@@ -1,11 +1,10 @@
 'use client';
-
-import { Client } from '@/interfaces';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatMoney } from '../formatMoney';
+import { ClientType } from '@/lib/typesConsultas';
 
-export default function ClientRow({ client }: { client: Client }) {
+export default function ClientRow({ client }: { client: ClientType }) {
 	const router = useRouter();
 	const handleClick = (id: string) => {
 		router.push(`/dashboard/client/${id}`);
@@ -18,7 +17,7 @@ export default function ClientRow({ client }: { client: Client }) {
 				</td>
 				<td onClick={() => handleClick(client.id)}>{client.identificacion}</td>
 				<td onClick={() => handleClick(client.id)}>{client.telefono}</td>
-				<td onClick={() => handleClick(client.id)}>{client.sector}</td>
+				<td onClick={() => handleClick(client.id)}>{client.sectors?.nombre_sector}</td>
 				<td className='cursor-default'>
 					<Link
 						href={`http://${client.ipv4}`}
@@ -28,7 +27,9 @@ export default function ClientRow({ client }: { client: Client }) {
 						{client.ipv4}
 					</Link>
 				</td>
-				<td onClick={() => handleClick(client.id)}>{client.plan}</td>
+				<td onClick={() => handleClick(client.id)}>
+					{client.services?.nombre_service}
+				</td>
 				<td
 					onClick={() => handleClick(client.id)}
 					className={`text-right pr-4 ${

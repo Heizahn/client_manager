@@ -21,7 +21,7 @@ export default function ServiceReceivable({ clientId }: { clientId: string }) {
 			.finally(() => {
 				setLoading(false);
 			});
-	}, []);
+	}, [clientId]);
 
 	return (
 		invoices && (

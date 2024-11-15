@@ -1,7 +1,7 @@
+import { ClientType } from '@/lib/typesConsultas';
 import ClientRow from './clientRow';
-import { Client } from '@/interfaces';
 
-export default function ClientsTable({ clients }: { clients: Client[] }) {
+export default function ClientsTable({ clients }: { clients: ClientType[] }) {
 	return (
 		<div className='max-h-[calc(100vh_-_7.5rem)] overflow-y-auto scrollbar-none rounded-b-md'>
 			<table className='w-full bg-gray-800 '>
@@ -18,7 +18,7 @@ export default function ClientsTable({ clients }: { clients: Client[] }) {
 					</tr>
 				</thead>
 				<tbody>
-					{clients.map((client: Client) => (
+					{clients.map((client: ClientType) => (
 						<ClientRow key={client.id} client={client} />
 					))}
 				</tbody>

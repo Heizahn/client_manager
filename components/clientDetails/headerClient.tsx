@@ -1,5 +1,5 @@
 'use client';
-import { ClientDetails, ClientDetailsHeader } from '@/interfaces';
+import { ClientDetailsHeader } from '@/interfaces';
 import Breadcrumbs from '../viewclients/breadcrums';
 import { formatMoney } from '../formatMoney';
 import { useEffect, useState } from 'react';

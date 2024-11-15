@@ -6,13 +6,15 @@ import {
 	CreateClient,
 	ServiceReceivable,
 } from '@/interfaces';
-import { createClient } from './supabase/client';
+import { createClient, createClientTables } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
+import { ClientType } from './typesConsultas';
 
-export async function fetchAllClients(): Promise<Client[]> {
+export async function fetchAllClients(): Promise<ClientType[]> {
 	noStore();
-	const supabase = await createClient();
+	const supabase = await createClientTables();
+
 	const { data, error } = await supabase
 		.from('clients')
 		.select(
@@ -26,89 +28,61 @@ export async function fetchAllClients(): Promise<Client[]> {
 	if (!data) {
 		return [];
 	}
-
-	return data.map((client: any) => {
-		const { sectors, services } = client;
-		const sector = sectors?.nombre_sector;
-		const service = services?.nombre_service;
-		return {
-			...client,
-			sector,
-			plan: service,
-		};
-	});
+	return data as unknown as ClientType[];
 }
 
-export async function fetchSolventsClients(): Promise<Client[]> {
+export async function fetchSolventsClients(): Promise<ClientType[]> {
 	noStore();
-	const supabase = await createClient();
+	const supabase = await createClientTables();
 
-	const res = await supabase
+	const { data, error } = await supabase
 		.from('clients')
 		.select(
-			'id, nombre, identificacion, telefono, ipv4, saldo, estado, services(nombre), sectors(nombre)',
+			'id, nombre, identificacion, telefono, ipv4, saldo, estado, services(nombre_service), sectors(nombre_sector)',
 		)
 		.gte('saldo', 0)
 		.order('nombre')
 		.eq('estado', true);
 
-	if (res.error) {
-		console.log(res.error);
+	if (error) {
+		throw new Error(error.message);
 	}
-	if (!res.data) {
+	if (!data) {
 		return [];
 	}
 
-	return res.data.map((client: any) => {
-		const { services, sectors } = client;
-		const sector = sectors.nombre;
-		const service = services.nombre;
-		return {
-			...client,
-			plan: service,
-			sector,
-		};
-	});
+	return data as unknown as ClientType[];
 }
 
-export async function fetchDefaultersClients(): Promise<Client[]> {
+export async function fetchDefaultersClients(): Promise<ClientType[]> {
 	noStore();
-	const supabase = await createClient();
+	const supabase = await createClientTables();
 	const { data, error } = await supabase
 		.from('clients')
 		.select(
-			'id, nombre, identificacion,telefono, ipv4, saldo, estado, sectors(nombre), services(nombre)',
+			'id, nombre, identificacion,telefono, ipv4, saldo, estado, sectors(nombre_sector), services(nombre_service)',
 		)
 		.lt('saldo', 0)
 		.eq('estado', true)
 		.order('nombre');
 
 	if (error) {
-		console.log(error);
+		throw new Error(error.message);
 	}
 	if (!data) {
 		return [];
 	}
 
-	return data.map((client: any) => {
-		const { services, sectors } = client;
-		const sector = sectors?.nombre;
-		const service = services?.nombre;
-		return {
-			...client,
-			plan: service,
-			sector,
-		};
-	});
+	return data as unknown as ClientType[];
 }
 
-export async function fetchSuspendedClients(): Promise<Client[]> {
+export async function fetchSuspendedClients(): Promise<ClientType[]> {
 	noStore();
-	const supabase = await createClient();
+	const supabase = await createClientTables();
 	const { data, error } = await supabase
 		.from('clients')
 		.select(
-			'id, nombre, identificacion,telefono, ipv4, saldo, estado, sectors(nombre), services(nombre)',
+			'id, nombre, identificacion,telefono, ipv4, saldo, estado, sectors(nombre_sector), services(nombre_service)',
 		)
 		.eq('estado', false)
 		.order('nombre');
@@ -120,16 +94,7 @@ export async function fetchSuspendedClients(): Promise<Client[]> {
 		return [];
 	}
 
-	return data.map((client: any) => {
-		const { services, sectors } = client;
-		const sector = sectors?.nombre;
-		const service = services?.nombre;
-		return {
-			...client,
-			plan: service,
-			sector,
-		};
-	});
+	return data as unknown as ClientType[];
 }
 
 export async function fetchCountClients(): Promise<number> {
