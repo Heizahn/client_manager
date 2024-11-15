@@ -1,21 +1,32 @@
-import type { ClientDetails } from '@/interfaces';
+'use client';
+
+import { ClientDetails } from '@/interfaces';
 import Detail from './detail';
 import DetailContainer from './detailContainer';
 import { formatDate } from '../dateFormat';
 import { formatMoney } from '../formatMoney';
+import { useStoreClientView } from '@/store/storeClientView';
+import { useEffect, useState } from 'react';
+import { fetchClientById } from '@/lib/fetchData';
+import { toast } from 'react-toastify';
+import SkeletonDetail from './skeletonDetail';
 
-export default function ClientDetails({
-	client,
-	showSection,
-}: {
-	client: ClientDetails | null;
-	showSection: boolean;
-}) {
+export default function ClientDetailsById({ clientId }: { clientId: string }) {
+	const { details } = useStoreClientView();
+	const [client, setClient] = useState<ClientDetails | null>(null);
+
+	useEffect(() => {
+		fetchClientById(clientId)
+			.then((client) => setClient(client))
+			.catch((err) => toast.error(err.message));
+	}, [clientId]);
+
 	if (!client) {
-		return;
+		return <SkeletonDetail />;
 	}
+
 	return (
-		showSection && (
+		details && (
 			<div className='flex flex-wrap bg-gray-800 px-4 pb-8 pt-4 rounded-b-md'>
 				<div className='w-72 lg:w-1/3 px-4 py-2 flex flex-col gap-1'>
 					<DetailContainer title='Datos Personales'>

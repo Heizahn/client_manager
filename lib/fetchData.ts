@@ -1,5 +1,11 @@
 'use server';
-import { Client, ClientDetails, CreateClient, ServiceReceivable } from '@/interfaces';
+import {
+	Client,
+	ClientDetails,
+	ClientDetailsHeader,
+	CreateClient,
+	ServiceReceivable,
+} from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
@@ -199,13 +205,8 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 		)
 		.eq('id', id);
 
-	console.log(data);
 	if (error) {
-		throw new Error('Debes estar logeado para acceder a este recurso');
-	}
-
-	if (!data) {
-		throw new Error('Cliente no encontrado');
+		throw new Error('Cliente no valido');
 	}
 
 	return data.map((client: any) => {
@@ -220,6 +221,21 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 			sector,
 		};
 	})[0];
+}
+
+export async function fetchClientHeaderById(id: string): Promise<ClientDetailsHeader> {
+	noStore();
+	const supabase = await createClient();
+	const { data, error } = await supabase
+		.from('clients')
+		.select('id, nombre, saldo, estado, direccion')
+		.eq('id', id);
+
+	if (error) {
+		throw new Error('Error al buscar el cliente');
+	}
+
+	return data[0] as unknown as ClientDetailsHeader;
 }
 
 export async function fetchCreateClient(values: CreateClient): Promise<string> {

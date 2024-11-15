@@ -1,32 +1,25 @@
-'use client';
-import { fetchClientById } from '@/lib/fetchData';
-import type { ClientDetails } from '@/interfaces';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import ClientDetailsById from '@/components/clientDetails/clientDetails';
+import HeaderClient from '@/components/clientDetails/headerClient';
 
-export default function Page() {
-	const { id } = useParams();
-	const [client, setClient] = useState<ClientDetails | null>(null);
+export default async function Page({ params }: { params: { id: string } }) {
+	const { id } = await params;
 
-	useEffect(() => {
-		fetchClientById(id as string)
-			.then((client) => setClient(client))
-			.catch((err) => toast.error(err.message));
-	}, [id]);
-
+	if (!id) {
+		return <div>No se encontro el cliente</div>;
+	}
 	return (
-		<div className='flex flex-col md:overflow-hidden mt-2'>
-			{/* <Suspense fallback={<div>Loading feed...</div>}>
-				{/* Details 
-				<Details client={client} showSection={selectedSection.details} />
+		<>
+			<div className='flex flex-col md:overflow-hidden'>
+				<HeaderClient clientId={id as string} />
+				{/* Details */}
+				<ClientDetailsById clientId={id as string} />
 
-				{/* Invoices 
-				<ServiceReceivable
+				{/* Invoices */}
+				{/* <ServiceReceivable
 					clientId={id as string}
 					showSection={selectedSection.invoices}
-				/>
-			</Suspense> */}
-		</div>
+					/> */}
+			</div>
+		</>
 	);
 }

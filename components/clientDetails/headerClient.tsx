@@ -1,24 +1,18 @@
 'use client';
-import { ClientDetails } from '@/interfaces';
+import { ClientDetails, ClientDetailsHeader } from '@/interfaces';
 import Breadcrumbs from '../viewclients/breadcrums';
 import { formatMoney } from '../formatMoney';
 import { useEffect, useState } from 'react';
-import { fetchClientById } from '@/lib/fetchData';
+import { fetchClientHeaderById } from '@/lib/fetchData';
 import { toast } from 'react-toastify';
 import NavCliente from './navCliente';
 import LoaderHeader from './loaderHeader';
 
 export default function HeaderClient({ clientId }: { clientId: string }) {
-	const [client, setClient] = useState<ClientDetails | null>(null);
-	const [selectedSection, setSelectedSection] = useState({
-		details: true,
-		invoices: false,
-		payments: false,
-		statistics: false,
-	});
+	const [client, setClient] = useState<ClientDetailsHeader | null>(null);
 
 	useEffect(() => {
-		fetchClientById(clientId)
+		fetchClientHeaderById(clientId)
 			.then((client) => setClient(client))
 			.catch((err) => toast.error(err.message));
 	}, [clientId]);
@@ -93,10 +87,7 @@ export default function HeaderClient({ clientId }: { clientId: string }) {
 							</button>
 						</div>
 					</div>
-					<NavCliente
-						section={selectedSection}
-						setSelectedSection={setSelectedSection}
-					/>
+					<NavCliente />
 				</div>
 			</>
 		)

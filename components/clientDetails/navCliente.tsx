@@ -1,17 +1,10 @@
-interface Section {
-	details: boolean;
-	invoices: boolean;
-	payments: boolean;
-	statistics: boolean;
-}
+'use client';
+import { useStoreClientView } from '@/store/storeClientView';
 
-export default function NavCliente({
-	section,
-	setSelectedSection,
-}: {
-	section: Section;
-	setSelectedSection: React.Dispatch<React.SetStateAction<Section>>;
-}) {
+export default function NavCliente() {
+	const { details, invoices, payments, statistics, setSelectedSection } = useStoreClientView(
+		(state) => state,
+	);
 	return (
 		<nav className='px-4 py-2 mt-4 '>
 			<ul className='flex flex-row gap-8 text-base font-bold mb-2'>
@@ -27,7 +20,7 @@ export default function NavCliente({
 							})
 						}
 						className={
-							section.details
+							details
 								? 'underline underline-offset-8'
 								: 'hover:underline hover:underline-offset-8'
 						}
@@ -47,7 +40,7 @@ export default function NavCliente({
 							})
 						}
 						className={
-							section.invoices
+							invoices
 								? 'underline underline-offset-8'
 								: 'hover:underline hover:underline-offset-8'
 						}
@@ -67,7 +60,7 @@ export default function NavCliente({
 							})
 						}
 						className={
-							section.payments
+							payments
 								? 'underline underline-offset-8'
 								: 'hover:underline hover:underline-offset-8'
 						}
@@ -87,7 +80,7 @@ export default function NavCliente({
 							})
 						}
 						className={
-							section.statistics
+							statistics
 								? 'underline underline-offset-8'
 								: 'hover:underline hover:underline-offset-8'
 						}

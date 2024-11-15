@@ -49,7 +49,7 @@ export default function LoaderHeader() {
 				</div>
 
 				{/* Navigation */}
-				<div className='flex flex-row gap-4 justify-start px-4 py-2 mt-6 mb-2'>
+				<div className='flex flex-row gap-4 justify-start px-4 py-2 mt-4 mb-2'>
 					{Array(4)
 						.fill(null)
 						.map((_, i) => (

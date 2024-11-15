@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function Detail({
+export default function Details({
 	title,
 	label,
 	href,

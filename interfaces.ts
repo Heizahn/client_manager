@@ -19,6 +19,14 @@ export interface Client extends ClientOrigin {
 	estado: boolean;
 }
 
+export interface ClientDetailsHeader {
+	id: string;
+	nombre: string;
+	saldo: number;
+	estado: boolean;
+	direccion: string;
+}
+
 export interface ClientDetails extends Client {
 	direccion: string;
 	router: string;
