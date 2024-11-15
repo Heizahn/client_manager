@@ -1,5 +1,19 @@
 import * as yup from 'yup';
-
+export interface ClientValues {
+	nombre: string;
+	apellido: string;
+	telefono: string;
+	identificacion: string;
+	direccion: string;
+	sector: string;
+	router: string;
+	plan: string;
+	dia_corte: string;
+	part1: string;
+	part2: string;
+	part3: string;
+	part4: string;
+}
 export const schemaValidate = yup.object({
 	nombre: yup
 		.string()

@@ -1,9 +1,11 @@
 import type { Sector } from '@/interfaces';
 import { fetchSectors } from '@/lib/fetchDataSystems';
 import SectorRow from './sectorRow';
+import ErrorMessage from '../error';
 
 export default async function SectorTable() {
 	const sectors = await fetchSectors();
+
 	return (
 		<div className='max-h-[calc(100vh_-_5.7rem)] overflow-y-auto scrollbar-none rounded-md mt-1'>
 			<table className='w-full bg-gray-800 '>
@@ -16,9 +18,17 @@ export default async function SectorTable() {
 					</tr>
 				</thead>
 				<tbody>
-					{sectors.map((sector: Sector) => (
-						<SectorRow key={sector.id} sector={sector} />
-					))}
+					{typeof sectors !== 'string' ? (
+						sectors.map((sector: Sector) => (
+							<SectorRow key={sector.id} sector={sector} />
+						))
+					) : (
+						<tr>
+							<td colSpan={4}>
+								<ErrorMessage error={sectors} />
+							</td>
+						</tr>
+					)}
 				</tbody>
 			</table>
 		</div>

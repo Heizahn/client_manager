@@ -44,33 +44,3 @@ export async function getUserName() {
 
 	return name;
 }
-
-export async function getClientsForServiceReceivable() {
-	const supabase = await createClient();
-	const res = await supabase.from('clients').select('id, services(costo)');
-
-	if (res.error) {
-		console.log(res.error);
-	}
-
-	if (!res.data) {
-		return [];
-	}
-
-	const clients = res.data;
-
-	return clients.map((client) => {
-		const { services } = client;
-		const { costo } = services?.[0] || {};
-		return {
-			...client,
-			monto: costo,
-		};
-	});
-}
-
-export async function createServiceReceivableAutomatic() {
-	const clients = await getClientsForServiceReceivable();
-
-	console.log(clients);
-}

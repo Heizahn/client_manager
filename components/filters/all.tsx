@@ -10,7 +10,7 @@ export default function All() {
 	const { AllCount, Recount } = useStore((state) => state);
 	useEffect(() => {
 		Recount();
-	}, []);
+	}, [Recount]);
 
 	const isActive = path === '/dashboard/clients';
 	return (

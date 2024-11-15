@@ -50,7 +50,7 @@ export interface CreateRouterSchema {
 }
 export interface Sector {
 	id: string;
-	nombre: string;
+	nombre_sector: string;
 	created_at: string;
 	clientes: number;
 	estado: boolean;

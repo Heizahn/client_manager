@@ -2,7 +2,7 @@
 import { fetchCreateRouter, fetchDataSelect } from '@/lib/fetchDataSystems';
 import { schemaRouter } from './schemaRouter';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateRouterSchema } from '@/interfaces';
 
 export default function NewRouter({
@@ -66,7 +66,7 @@ export default function NewRouter({
 							type='text'
 							name='nombre'
 							placeholder='RB_VEGAS'
-							onInput={(e: any) =>
+							onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 								(e.target.value = e.target.value
 									.toUpperCase()
 									.replace(/[^A-Z0-9\_]/g, ''))
@@ -94,23 +94,27 @@ export default function NewRouter({
 									maxLength={3}
 									minLength={1}
 									id='part1'
-									onInput={(e: any) =>
+									onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 										(e.target.value = e.target.value.replace(
 											/[^0-9]/g,
 											'',
 										))
 									}
-									onKeyDown={(e: any) => {
+									onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
 										if (
 											e.key === '.' &&
-											e.target.value.length >= e.target.minLength
+											e.currentTarget.value.length >=
+												e.currentTarget.minLength
 										) {
 											document.getElementById('part2')?.focus();
-										} else if (e.key === '.' && e.target.value === '') {
+										} else if (
+											e.key === '.' &&
+											e.currentTarget.value === ''
+										) {
 											e.preventDefault();
 										}
 									}}
-									onKeyUp={(e: any) => {
+									onKeyUp={(e: React.ChangeEvent<HTMLInputElement>) => {
 										if (e.target.value.length === 3) {
 											e.preventDefault();
 											document.getElementById('part2')?.focus();
@@ -130,24 +134,33 @@ export default function NewRouter({
 									maxLength={3}
 									minLength={1}
 									id='part2'
-									onInput={(e: any) =>
+									onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 										(e.target.value = e.target.value.replace(
 											/[^0-9]/g,
 											'',
 										))
 									}
-									onKeyDown={(e: any) => {
-										if (e.key === '.' && e.target.value.length >= 1) {
+									onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+										if (
+											e.key === '.' &&
+											e.currentTarget.value.length >= 1
+										) {
 											document.getElementById('part3')?.focus();
-										} else if (e.key === '.' && e.target.value === '') {
+										} else if (
+											e.key === '.' &&
+											e.currentTarget.value === ''
+										) {
 											e.preventDefault();
 										}
 									}}
-									onKeyUp={(e: any) => {
-										if (e.target.value.length >= 3) {
+									onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+										if (e.currentTarget.value.length >= 3) {
 											document.getElementById('part3')?.focus();
 										}
-										if (e.key === 'Backspace' && e.target.value === '') {
+										if (
+											e.key === 'Backspace' &&
+											e.currentTarget.value === ''
+										) {
 											document.getElementById('part1')?.focus();
 										}
 									}}
@@ -165,28 +178,35 @@ export default function NewRouter({
 									maxLength={3}
 									minLength={1}
 									id='part3'
-									onInput={(e: any) =>
+									onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 										(e.target.value = e.target.value.replace(
 											/[^0-9]/g,
 											'',
 										))
 									}
-									onKeyDown={(e: any) => {
+									onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
 										if (
 											e.key === '.' &&
-											e.target.value.length >= e.target.minLength
+											e.currentTarget.value.length >=
+												e.currentTarget.minLength
 										) {
 											document.getElementById('part4')?.focus();
-										} else if (e.key === '.' && e.target.value === '') {
+										} else if (
+											e.key === '.' &&
+											e.currentTarget.value === ''
+										) {
 											e.preventDefault();
 										}
 									}}
-									onKeyUp={(e: any) => {
-										if (e.target.value.length === 3) {
+									onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+										if (e.currentTarget.value.length === 3) {
 											e.preventDefault();
 											document.getElementById('part4')?.focus();
 										}
-										if (e.key === 'Backspace' && e.target.value === '') {
+										if (
+											e.key === 'Backspace' &&
+											e.currentTarget.value === ''
+										) {
 											document.getElementById('part2')?.focus();
 										}
 									}}
@@ -204,14 +224,17 @@ export default function NewRouter({
 									maxLength={3}
 									minLength={1}
 									id='part4'
-									onInput={(e: any) =>
+									onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 										(e.target.value = e.target.value.replace(
 											/[^0-9]/g,
 											'',
 										))
 									}
-									onKeyUp={(e: any) => {
-										if (e.key === 'Backspace' && e.target.value === '') {
+									onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+										if (
+											e.key === 'Backspace' &&
+											e.currentTarget.value === ''
+										) {
 											document.getElementById('part3')?.focus();
 										}
 									}}

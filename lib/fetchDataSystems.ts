@@ -21,7 +21,7 @@ export async function fetchRouters(): Promise<Router[]> {
 		ip,
 		clientes,
 		estado,
-		sectors(nombre)`);
+		sectors(nombre_sector)`);
 
 	if (consulta.error) {
 		console.log(consulta.error);
@@ -31,41 +31,28 @@ export async function fetchRouters(): Promise<Router[]> {
 		return [];
 	}
 
-	type Router_DTO = {
-		id: string;
-		nombre: string;
-		ip: string;
-		clientes: number;
-		estado: boolean;
-		sectors: Sector_DTO;
-	};
+	const routers = consulta.data;
 
-	interface Sector_DTO {
-		nombre: string;
-	}
-	// @ts-ignore
-	const routers: Router_DTO[] = consulta.data;
-
-	return routers.map((router) => {
+	return routers.map((router: any) => {
 		const { sectors } = router;
-		const { nombre } = sectors;
+		const sector = sectors.nombre_sector;
 		return {
 			...router,
-			sector: nombre,
+			sector,
 		};
 	});
 }
 
-export async function fetchSectors(): Promise<Sector[]> {
+export async function fetchSectors(): Promise<Sector[] | string> {
 	noStore();
 	const supabase = await createClient();
 	const { data, error } = await supabase
 		.from('sectors')
-		.select('id, nombre, created_at, clientes, estado')
-		.order('nombre');
+		.select('id, nombre_sector, created_at, clientes, estado')
+		.order('nombre_sector');
 
 	if (error) {
-		console.log(error);
+		return error.message;
 	}
 
 	return data || [];
@@ -85,7 +72,7 @@ export async function fetchCreateSector(nombre: string) {
 	const { id } = user;
 	const { error } = await supabase
 		.from('sectors')
-		.insert({ nombre, estado: true, created_by: id });
+		.insert({ nombre_sector: nombre, estado: true, created_by: id });
 
 	if (error) {
 		return Error(error.message);
@@ -159,14 +146,13 @@ export async function fetchCreateService(values: CreateService) {
 	return 'Servicio creado exitosamente';
 }
 
-export async function fetchDataSelect(table: string): Promise<DataSelect[]> {
+export async function fetchDataSelectRouter(): Promise<DataSelect[]> {
 	noStore();
 	const supabase = await createClient();
-	const order = table === 'services' ? 'tipo' : 'nombre';
 	const res = await supabase
-		.from(table)
-		.select(`id, nombre${table === 'services' ? ', tipo' : ''}`)
-		.order(order, { ascending: true });
+		.from('routers')
+		.select(`id, nombre`)
+		.order('nombre', { ascending: true });
 
 	if (res.error) {
 		console.log(res.error);
@@ -175,7 +161,41 @@ export async function fetchDataSelect(table: string): Promise<DataSelect[]> {
 		return [];
 	}
 
-	//@ts-ignore
-	const data: DataSelect[] = res.data;
-	return data;
+	return res.data as unknown as DataSelect[];
+}
+
+export async function fetchDataSelectSector(): Promise<DataSelect[]> {
+	noStore();
+	const supabase = await createClient();
+	const res = await supabase
+		.from('sectors')
+		.select(`id, nombre_sector`)
+		.order('nombre_sector', { ascending: true });
+
+	if (res.error) {
+		console.log(res.error);
+	}
+	if (!res.data) {
+		return [];
+	}
+
+	return res.data as unknown as DataSelect[];
+}
+
+export async function fetchDataSelectService(): Promise<DataSelect[]> {
+	noStore();
+	const supabase = await createClient();
+	const res = await supabase
+		.from('services')
+		.select(`id, nombre, tipo`)
+		.order('tipo', { ascending: true });
+
+	if (res.error) {
+		console.log(res.error);
+	}
+	if (!res.data) {
+		return [];
+	}
+
+	return res.data as unknown as DataSelect[];
 }

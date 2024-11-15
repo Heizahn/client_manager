@@ -10,7 +10,7 @@ export async function fetchAllClients(): Promise<Client[]> {
 	const { data, error } = await supabase
 		.from('clients')
 		.select(
-			'id, nombre, identificacion,telefono, ipv4, saldo, estado, services(nombre), sectors(nombre)',
+			'id, nombre, identificacion, telefono, ipv4, saldo, estado, services(nombre_service), sectors(nombre_sector)',
 		)
 		.order('nombre');
 
@@ -20,13 +20,11 @@ export async function fetchAllClients(): Promise<Client[]> {
 	if (!data) {
 		return [];
 	}
-	//@ts-ignore
-	return data.map((client) => {
+
+	return data.map((client: any) => {
 		const { sectors, services } = client;
-		//@ts-ignore
-		const sector = sectors?.nombre || '';
-		//@ts-ignore
-		const service = services?.nombre || '';
+		const sector = sectors?.nombre_sector;
+		const service = services?.nombre_service;
 		return {
 			...client,
 			sector,
@@ -38,28 +36,27 @@ export async function fetchAllClients(): Promise<Client[]> {
 export async function fetchSolventsClients(): Promise<Client[]> {
 	noStore();
 	const supabase = await createClient();
-	const { data, error } = await supabase
+
+	const res = await supabase
 		.from('clients')
 		.select(
-			'id, nombre, identificacion,telefono, ipv4, saldo, estado, services(nombre), sectors(nombre)',
+			'id, nombre, identificacion, telefono, ipv4, saldo, estado, services(nombre), sectors(nombre)',
 		)
 		.gte('saldo', 0)
 		.order('nombre')
 		.eq('estado', true);
 
-	if (error) {
-		console.log(error);
+	if (res.error) {
+		console.log(res.error);
 	}
-	if (!data) {
+	if (!res.data) {
 		return [];
 	}
-	//@ts-ignore
-	return data.map((client) => {
+
+	return res.data.map((client: any) => {
 		const { services, sectors } = client;
-		//@ts-ignore
-		const sector = sectors?.nombre || '';
-		//@ts-ignore
-		const service = services?.nombre || '';
+		const sector = sectors.nombre;
+		const service = services.nombre;
 		return {
 			...client,
 			plan: service,
@@ -86,13 +83,11 @@ export async function fetchDefaultersClients(): Promise<Client[]> {
 	if (!data) {
 		return [];
 	}
-	//@ts-ignore
-	return data.map((client) => {
+
+	return data.map((client: any) => {
 		const { services, sectors } = client;
-		//@ts-ignore
-		const sector = sectors?.nombre || '';
-		//@ts-ignore
-		const service = services?.nombre || '';
+		const sector = sectors?.nombre;
+		const service = services?.nombre;
 		return {
 			...client,
 			plan: service,
@@ -118,13 +113,11 @@ export async function fetchSuspendedClients(): Promise<Client[]> {
 	if (!data) {
 		return [];
 	}
-	//@ts-ignore
-	return data.map((client) => {
+
+	return data.map((client: any) => {
 		const { services, sectors } = client;
-		//@ts-ignore
-		const sector = sectors?.nombre || '';
-		//@ts-ignore
-		const service = services?.nombre || '';
+		const sector = sectors?.nombre;
+		const service = services?.nombre;
 		return {
 			...client,
 			plan: service,
@@ -214,15 +207,12 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 	if (!data) {
 		throw new Error('Client not found');
 	}
-	//@ts-ignore
-	return data.map((client) => {
+
+	return data.map((client: any) => {
 		const { routers, services, sectors } = client;
-		//@ts-ignore
-		const router = routers?.nombre || '';
-		//@ts-ignore
-		const service = services?.nombre || '';
-		//@ts-ignore
-		const sector = sectors?.nombre || '';
+		const router = routers?.nombre;
+		const service = services?.nombre;
+		const sector = sectors?.nombre;
 		return {
 			...client,
 			router,

@@ -1,7 +1,7 @@
 'use client';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { InitialValues, schemaValidate } from './schemaValidate';
+import { InitialValues, schemaValidate, ClientValues } from './schemaValidate';
 import { fetchDataSelect } from '@/lib/fetchDataSystems';
 import { DataSelect } from '@/interfaces';
 import { fetchCreateClient } from '@/lib/fetchData';
@@ -18,7 +18,7 @@ export default function NewClient({
 
 	const { Recount } = useStore((state) => state);
 
-	const handlerSubmit = (values: any) => {
+	const handlerSubmit = (values: ClientValues) => {
 		const data = {
 			nombre: values.nombre + ' ' + values.apellido,
 			telefono: values.telefono,
@@ -85,7 +85,7 @@ export default function NewClient({
 								id='nombre'
 								placeholder='Juan'
 								className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
-								onInput={(e: any) =>
+								onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 									e.target.value
 										? (e.target.value =
 												e.target.value.toLowerCase()[0].toUpperCase() +
@@ -107,7 +107,7 @@ export default function NewClient({
 								id='apellido'
 								placeholder='Perez'
 								className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
-								onInput={(e: any) =>
+								onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 									e.target.value
 										? (e.target.value =
 												e.target.value.toLowerCase()[0].toUpperCase() +
@@ -131,7 +131,7 @@ export default function NewClient({
 								id='identificacion'
 								placeholder='V-12345678'
 								className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
-								onInput={(e: any) =>
+								onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 									e.target.value
 										? (e.target.value =
 												e.target.value.toLowerCase()[0].toUpperCase() +
@@ -253,23 +253,27 @@ export default function NewClient({
 									maxLength={3}
 									minLength={1}
 									id='part1'
-									onInput={(e: any) =>
+									onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 										(e.target.value = e.target.value.replace(
 											/[^0-9]/g,
 											'',
 										))
 									}
-									onKeyDown={(e: any) => {
+									onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
 										if (
 											e.key === '.' &&
-											e.target.value.length >= e.target.minLength
+											e.currentTarget.value.length >=
+												e.currentTarget.minLength
 										) {
 											document.getElementById('part2')?.focus();
-										} else if (e.key === '.' && e.target.value === '') {
+										} else if (
+											e.key === '.' &&
+											e.currentTarget.value === ''
+										) {
 											e.preventDefault();
 										}
 									}}
-									onKeyUp={(e: any) => {
+									onKeyUp={(e: React.ChangeEvent<HTMLInputElement>) => {
 										if (e.target.value.length === 3) {
 											e.preventDefault();
 											document.getElementById('part2')?.focus();
@@ -284,24 +288,33 @@ export default function NewClient({
 									maxLength={3}
 									minLength={1}
 									id='part2'
-									onInput={(e: any) =>
+									onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 										(e.target.value = e.target.value.replace(
 											/[^0-9]/g,
 											'',
 										))
 									}
-									onKeyDown={(e: any) => {
-										if (e.key === '.' && e.target.value.length >= 1) {
+									onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+										if (
+											e.key === '.' &&
+											e.currentTarget.value.length >= 1
+										) {
 											document.getElementById('part3')?.focus();
-										} else if (e.key === '.' && e.target.value === '') {
+										} else if (
+											e.key === '.' &&
+											e.currentTarget.value === ''
+										) {
 											e.preventDefault();
 										}
 									}}
-									onKeyUp={(e: any) => {
-										if (e.target.value.length >= 3) {
+									onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+										if (e.currentTarget.value.length >= 3) {
 											document.getElementById('part3')?.focus();
 										}
-										if (e.key === 'Backspace' && e.target.value === '') {
+										if (
+											e.key === 'Backspace' &&
+											e.currentTarget.value === ''
+										) {
 											document.getElementById('part1')?.focus();
 										}
 									}}
@@ -314,28 +327,35 @@ export default function NewClient({
 									maxLength={3}
 									minLength={1}
 									id='part3'
-									onInput={(e: any) =>
+									onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 										(e.target.value = e.target.value.replace(
 											/[^0-9]/g,
 											'',
 										))
 									}
-									onKeyDown={(e: any) => {
+									onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
 										if (
 											e.key === '.' &&
-											e.target.value.length >= e.target.minLength
+											e.currentTarget.value.length >=
+												e.currentTarget.minLength
 										) {
 											document.getElementById('part4')?.focus();
-										} else if (e.key === '.' && e.target.value === '') {
+										} else if (
+											e.key === '.' &&
+											e.currentTarget.value === ''
+										) {
 											e.preventDefault();
 										}
 									}}
-									onKeyUp={(e: any) => {
-										if (e.target.value.length === 3) {
+									onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+										if (e.currentTarget.value.length === 3) {
 											e.preventDefault();
 											document.getElementById('part4')?.focus();
 										}
-										if (e.key === 'Backspace' && e.target.value === '') {
+										if (
+											e.key === 'Backspace' &&
+											e.currentTarget.value === ''
+										) {
 											document.getElementById('part2')?.focus();
 										}
 									}}
@@ -348,14 +368,17 @@ export default function NewClient({
 									maxLength={3}
 									minLength={1}
 									id='part4'
-									onInput={(e: any) =>
+									onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 										(e.target.value = e.target.value.replace(
 											/[^0-9]/g,
 											'',
 										))
 									}
-									onKeyUp={(e: any) => {
-										if (e.key === 'Backspace' && e.target.value === '') {
+									onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+										if (
+											e.key === 'Backspace' &&
+											e.currentTarget.value === ''
+										) {
 											document.getElementById('part3')?.focus();
 										}
 									}}
