@@ -1,13 +1,12 @@
+'use client';
+
 import ClientDetailsById from '@/components/clientDetails/clientDetails';
 import HeaderClient from '@/components/clientDetails/headerClient';
 import ServiceReceivable from '@/components/serviceReceivable/serviceReceivable';
+import { useParams } from 'next/navigation';
 
-export default async function Page({ params }: { params: { id: string } }) {
-	const { id } = await params;
-
-	if (!id) {
-		return <div>No se encontro el cliente</div>;
-	}
+export default function Page() {
+	const { id } = useParams();
 	return (
 		<>
 			<div className='flex flex-col md:overflow-hidden'>

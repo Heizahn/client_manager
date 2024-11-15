@@ -1,10 +1,9 @@
 import ClientsTable from '@/components/viewclients/clientsTable';
-
-import { Client } from '@/interfaces';
 import { fetchSolventsClients } from '@/lib/fetchData';
+import { ClientType } from '@/lib/typesConsultas';
 
 export default async function Page() {
-	const clients: Client[] = await fetchSolventsClients();
+	const clients: ClientType[] = await fetchSolventsClients();
 
 	return (
 		<div className='mt-2'>

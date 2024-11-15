@@ -1,10 +1,10 @@
 import ClientsTable from '@/components/viewclients/clientsTable';
 
-import { Client } from '@/interfaces';
 import { fetchSuspendedClients } from '@/lib/fetchData';
+import { ClientType } from '@/lib/typesConsultas';
 
 export default async function Page() {
-	const clients: Client[] = await fetchSuspendedClients();
+	const clients: ClientType[] = await fetchSuspendedClients();
 
 	return (
 		<div className='mt-2'>
