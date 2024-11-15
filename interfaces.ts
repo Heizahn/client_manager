@@ -73,8 +73,10 @@ export interface CreateService {
 
 export interface DataSelect {
 	id: string;
-	nombre: string;
-	tipo?: string;
+}
+
+export interface DataSelectSector extends DataSelect {
+	nombre_sector: string;
 }
 
 export interface ServiceReceivable {

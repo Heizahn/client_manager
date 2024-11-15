@@ -1,34 +1,44 @@
 'use client';
-import { fetchCreateRouter, fetchDataSelect } from '@/lib/fetchDataSystems';
+import { fetchCreateRouter, fetchDataSelectSector } from '@/lib/fetchDataSystems';
 import { schemaRouter } from './schemaRouter';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { CreateRouterSchema } from '@/interfaces';
+import { CreateRouterSchema, DataSelectSector } from '@/interfaces';
+import { toast } from 'react-toastify';
 
 export default function NewRouter({
 	setShow,
 }: {
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const [sectors, setSectors] = useState<{ id: string; nombre: string }[]>([]);
+	const [sectors, setSectors] = useState<DataSelectSector[]>([]);
+	const [loading, setLoading] = useState(true);
+
 	const handlerSubmit = (values: CreateRouterSchema) => {
+		setLoading(true);
 		fetchCreateRouter({
 			...values,
 			ip: `${values.part1}.${values.part2}.${values.part3}.${values.part4}`,
 		})
 			.then((res) => {
-				if (res) {
-					alert(res);
+				if (typeof res === 'string') {
+					toast.success(res);
 					setShow(false);
 				}
 			})
 			.catch((err) => {
-				console.log(err);
+				toast.error(err.message);
+			})
+			.finally(() => {
+				setLoading(false);
 			});
 	};
 
 	useEffect(() => {
-		fetchDataSelect('sectors').then((res) => setSectors(res));
+		fetchDataSelectSector().then((res) => {
+			setSectors(res);
+			setLoading(false);
+		});
 	}, []);
 
 	return (
@@ -254,17 +264,27 @@ export default function NewRouter({
 							name='sector'
 							className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
 						>
-							<option value=''>Seleccione...</option>
-							{sectors.map((sector) => (
-								<option key={sector.id} value={sector.id}>
-									{sector.nombre}
-								</option>
-							))}
+							{!loading ? (
+								<>
+									<option value=''>Seleccione...</option>
+									{sectors.length > 0 &&
+										sectors.map((sector) => (
+											<option key={sector.id} value={sector.id}>
+												{sector.nombre_sector}
+											</option>
+										))}
+								</>
+							) : (
+								<option value=''>Cargando...</option>
+							)}
 						</Field>
 					</div>
 					<button
 						type='submit'
-						className='mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear'
+						disabled={loading}
+						className={`mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear ${
+							loading ? 'opacity-50 bg-blue-950 hover:bg-blue-950' : ''
+						}`}
 					>
 						Crear
 					</button>

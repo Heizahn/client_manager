@@ -6,6 +6,7 @@ import type {
 	Service,
 	CreateService,
 	DataSelect,
+	DataSelectSector,
 } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
@@ -89,7 +90,7 @@ export async function fetchCreateRouter({ nombre, ip, sector }: CreateRouter) {
 	} = await supabaseServer.auth.getUser();
 
 	if (!user) {
-		throw new Error('No user found');
+		throw new Error('Debes estar logeado para crear un router');
 	}
 
 	const { id } = user;
@@ -98,7 +99,7 @@ export async function fetchCreateRouter({ nombre, ip, sector }: CreateRouter) {
 		.insert({ nombre, ip, sector_id: sector, created_by: id, estado: true });
 
 	if (error) {
-		return Error(error.message);
+		return Error('Error al crear el router');
 	}
 	revalidatePath('/dashboard/routers');
 	return 'Sector creado exitosamente';
@@ -164,9 +165,10 @@ export async function fetchDataSelectRouter(): Promise<DataSelect[]> {
 	return res.data as unknown as DataSelect[];
 }
 
-export async function fetchDataSelectSector(): Promise<DataSelect[]> {
+export async function fetchDataSelectSector(): Promise<DataSelectSector[]> {
 	noStore();
 	const supabase = await createClient();
+
 	const res = await supabase
 		.from('sectors')
 		.select(`id, nombre_sector`)
@@ -179,7 +181,7 @@ export async function fetchDataSelectSector(): Promise<DataSelect[]> {
 		return [];
 	}
 
-	return res.data as unknown as DataSelect[];
+	return res.data as unknown as DataSelectSector[];
 }
 
 export async function fetchDataSelectService(): Promise<DataSelect[]> {
