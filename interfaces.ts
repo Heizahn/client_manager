@@ -103,3 +103,16 @@ export interface ServiceReceivable {
 	deuda: number;
 	estado: boolean;
 }
+
+export interface PaymentStruct {
+	id: string;
+	motivo: string;
+	created_at: string;
+	tipo: string;
+	creado_por: string;
+	recibido_por: string;
+	monto_ref: number;
+	monto_bs: number;
+	referencia: string;
+	estado: boolean;
+}

@@ -20,7 +20,7 @@ export default function ServiceReceivable({ clientId }: { clientId: string }) {
 			.then((res) => setServicesReceivables(res))
 			.catch((err) => toast.error(err.message))
 			.finally(() => {
-				setLoading(true);
+				setLoading(false);
 			});
 	}, [clientId]);
 

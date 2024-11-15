@@ -1,18 +1,18 @@
 export default function SkeletonPayment() {
 	return (
-		<div className='flex flex-wrap bg-gray-800 px-4 pb-8 pt-4 rounded-b-md'>
-			<header className='w-full flex justify-between items-center'>
-				<h3 className='text-xl font-bold'>Pagos</h3>
-				<button className='hover:underline hover:underline-offset-4'>Crear</button>
-			</header>
+		<>
 			<div className='w-full max-h-[calc(100vh_-_7.5rem)] overflow-y-auto scrollbar-none rounded-b-md'>
 				<table className='w-full table-auto bg-gray-800 '>
 					<thead className='sticky top-0 bg-gray-800 mt-2'>
-						<tr className='text-left text-lg'>
+						<tr className='text-left text-lg animate-pulse'>
 							<th className='pl-4 py-2'>Motivo</th>
 							<th>Fecha Creación</th>
-							<th>Monto</th>
-							<th>Deuda</th>
+							<th>Tipo de Pago</th>
+							<th>Creado Por</th>
+							<th>Recibido Por</th>
+							<th>Monto (REF)</th>
+							<th>Monto (Bs)</th>
+							<th>Referencia</th>
 							<th>Estado</th>
 						</tr>
 					</thead>
@@ -37,11 +37,23 @@ export default function SkeletonPayment() {
 									<td>
 										<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
 									</td>
+									<td>
+										<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
+									</td>
+									<td>
+										<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
+									</td>
+									<td>
+										<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
+									</td>
+									<td>
+										<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
+									</td>
 								</tr>
 							))}
 					</tbody>
 				</table>
 			</div>
-		</div>
+		</>
 	);
 }
