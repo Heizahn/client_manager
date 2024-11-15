@@ -3,6 +3,7 @@
 import { Client } from '@/interfaces';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { formatMoney } from '../formatMoney';
 
 export default function ClientRow({ client }: { client: Client }) {
 	const router = useRouter();
@@ -28,8 +29,13 @@ export default function ClientRow({ client }: { client: Client }) {
 					</Link>
 				</td>
 				<td onClick={() => handleClick(client.id)}>{client.plan}</td>
-				<td onClick={() => handleClick(client.id)} className='text-right pr-4'>
-					{client.saldo.toFixed(2)}
+				<td
+					onClick={() => handleClick(client.id)}
+					className={`text-right pr-4 ${
+						client.saldo < 0 ? 'text-red-500' : 'text-green-500'
+					}`}
+				>
+					{formatMoney(client.saldo)}
 				</td>
 				<td
 					onClick={() => handleClick(client.id)}

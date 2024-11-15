@@ -2,6 +2,7 @@ import type { ClientDetails } from '@/interfaces';
 import Detail from './detail';
 import DetailContainer from './detailContainer';
 import { formatDate } from '../dateFormat';
+import { formatMoney } from '../formatMoney';
 
 export default function ClientDetails({
 	client,
@@ -56,7 +57,7 @@ export default function ClientDetails({
 					<DetailContainer title='Balance'>
 						<Detail
 							title='Saldo:'
-							label={`${client.saldo.toFixed(2)}$`}
+							label={`${formatMoney(client.saldo)}$`}
 							className={client.saldo < 0 ? 'text-red-500' : 'text-green-500'}
 						/>
 						<Detail title='Dia de Corte:' label={String(client.dia_corte)} />

@@ -1,5 +1,6 @@
 import { ClientDetails } from '@/interfaces';
 import Breadcrumbs from '../viewclients/breadcrums';
+import { formatMoney } from '../formatMoney';
 
 export default function HeaderClient({
 	client,
@@ -60,7 +61,7 @@ export default function HeaderClient({
 									client.saldo < 0 ? 'text-red-500' : 'text-green-500'
 								} flex flex-row items-center gap-1`}
 							>
-								Saldo: {client.saldo.toFixed(2)}$
+								Saldo: {formatMoney(client.saldo)}$
 							</span>
 						</div>
 					</div>
