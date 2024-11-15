@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { CreateRouterSchema, DataSelectSector } from '@/interfaces';
 import { toast } from 'react-toastify';
+import ButtonSubmit from '../buttonSubmit';
 
 export default function NewRouter({
 	setShow,
@@ -13,6 +14,7 @@ export default function NewRouter({
 }) {
 	const [sectors, setSectors] = useState<DataSelectSector[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [sectorsLoading, setSectorsLoading] = useState(true);
 
 	const handlerSubmit = (values: CreateRouterSchema) => {
 		setLoading(true);
@@ -37,6 +39,7 @@ export default function NewRouter({
 	useEffect(() => {
 		fetchDataSelectSector().then((res) => {
 			setSectors(res);
+			setSectorsLoading(false);
 			setLoading(false);
 		});
 	}, []);
@@ -264,7 +267,7 @@ export default function NewRouter({
 							name='sector'
 							className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
 						>
-							{!loading ? (
+							{!sectorsLoading ? (
 								<>
 									<option value=''>Seleccione...</option>
 									{sectors.length > 0 &&
@@ -279,15 +282,7 @@ export default function NewRouter({
 							)}
 						</Field>
 					</div>
-					<button
-						type='submit'
-						disabled={loading}
-						className={`mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear ${
-							loading ? 'opacity-50 bg-blue-950 hover:bg-blue-950' : ''
-						}`}
-					>
-						Crear
-					</button>
+					<ButtonSubmit loading={loading}>Crear</ButtonSubmit>
 				</Form>
 			</Formik>
 		</div>

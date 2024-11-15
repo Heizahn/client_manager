@@ -1,6 +1,7 @@
 'use client';
 
 import { Service } from '@/interfaces';
+import { formatMoney } from '../formatMoney';
 
 export default function RouterRow({ service }: { service: Service }) {
 	const handlerClick = (id: string) => {
@@ -16,7 +17,7 @@ export default function RouterRow({ service }: { service: Service }) {
 				<td className='text-left py-1 pl-4'>{service.nombre_service}</td>
 				<td>{service.tipo}</td>
 				<td>{service.clientes}</td>
-				<td>{service.costo}</td>
+				<td>{formatMoney(service.costo)}</td>
 				<td className={`${!service.estado ? 'text-red-500' : 'text-green-500'}`}>
 					{service.estado ? 'Activo' : 'Inactivo'}
 				</td>

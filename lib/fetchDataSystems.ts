@@ -132,17 +132,17 @@ export async function fetchCreateService(values: CreateService) {
 	} = await supabaseServer.auth.getUser();
 
 	if (!user) {
-		throw new Error('No user found');
+		throw new Error('Debes estar logeado para crear un servicio');
 	}
 
 	const { id } = user;
 	const { nombre, tipo, costo } = values;
 	const { error } = await supabase
 		.from('services')
-		.insert({ nombre, tipo, costo, created_by: id, estado: true });
+		.insert({ nombre_service: nombre, tipo, costo: costo * 100, created_by: id });
 
 	if (error) {
-		return Error(error.message);
+		throw new Error('Error al crear el servicio');
 	}
 	revalidatePath('/dashboard/services');
 	return 'Servicio creado exitosamente';

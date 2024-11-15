@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { InitialValues, schemaValidate } from './schemaValidate';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import ButtonSubmit from '../buttonSubmit';
 export default function NewSector({
 	setShow,
 }: {
@@ -20,8 +21,8 @@ export default function NewSector({
 					setShow(false);
 				}
 			})
-			.catch(() => {
-				toast.error('Error al crear el sector');
+			.catch((err) => {
+				toast.error(err.message);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -60,15 +61,7 @@ export default function NewSector({
 							className='w-full rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
 						/>
 					</div>
-					<button
-						type='submit'
-						disabled={loading}
-						className={`mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear ${
-							loading ? 'opacity-50 bg-blue-950 hover:bg-blue-950' : ''
-						}`}
-					>
-						Crear
-					</button>
+					<ButtonSubmit loading={loading}>Crear</ButtonSubmit>
 				</Form>
 			</Formik>
 		</div>

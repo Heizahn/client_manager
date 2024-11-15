@@ -14,7 +14,6 @@ export default function NewService({
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [loading, setLoading] = useState(false);
-	const [loadService, setLoadService] = useState(false);
 
 	const handlerSubmit = (values: CreateService) => {
 		setLoading(true);
