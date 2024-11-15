@@ -1,4 +1,3 @@
-'use client';
 import { ServiceReceivable } from '@/interfaces';
 import ServiceReceivableRow from './serviceReceivableRow';
 

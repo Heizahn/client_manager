@@ -6,6 +6,7 @@ import ServiceReceivableTable from './serviceReceivableTable';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useStoreClientView } from '@/store/storeClientView';
+import SkeletonTable from '../skeletonTable';
 
 export default function ServiceReceivable({ clientId }: { clientId: string }) {
 	const [servicesReceivables, setServicesReceivables] = useState<ServiceReceivableType[]>(
@@ -19,7 +20,7 @@ export default function ServiceReceivable({ clientId }: { clientId: string }) {
 			.then((res) => setServicesReceivables(res))
 			.catch((err) => toast.error(err.message))
 			.finally(() => {
-				setLoading(false);
+				setLoading(true);
 			});
 	}, [clientId]);
 
@@ -31,7 +32,7 @@ export default function ServiceReceivable({ clientId }: { clientId: string }) {
 					<button className='hover:underline hover:underline-offset-4'>Crear</button>
 				</header>
 				{loading ? (
-					<div className='flex items-center justify-center'>Loading...</div>
+					<SkeletonTable />
 				) : servicesReceivables.length > 0 ? (
 					<ServiceReceivableTable servicesReceivables={servicesReceivables} />
 				) : (
