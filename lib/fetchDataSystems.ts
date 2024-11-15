@@ -75,7 +75,7 @@ export async function fetchCreateSector(nombre: string) {
 		.insert({ nombre_sector: nombre, estado: true, created_by: id });
 
 	if (error) {
-		return Error(error.message);
+		throw new Error();
 	}
 	revalidatePath('/dashboard/sectors');
 	return 'Sector creado exitosamente';

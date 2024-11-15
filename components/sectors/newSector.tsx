@@ -3,21 +3,28 @@
 import { fetchCreateSector } from '@/lib/fetchDataSystems';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { InitialValues, schemaValidate } from './schemaValidate';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
 export default function NewSector({
 	setShow,
 }: {
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+	const [loading, setLoading] = useState(false);
 	const handleSubmit = (value: { nombre: string }) => {
+		setLoading(true);
 		fetchCreateSector(value.nombre)
 			.then((res) => {
 				if (res) {
-					alert(res);
+					toast.success('Sector creado exitosamente');
 					setShow(false);
 				}
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch(() => {
+				toast.error('Error al crear el sector');
+			})
+			.finally(() => {
+				setLoading(false);
 			});
 	};
 
@@ -55,7 +62,10 @@ export default function NewSector({
 					</div>
 					<button
 						type='submit'
-						className='mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear'
+						disabled={loading}
+						className={`mt-2 w-full py-1 bg-blue-700 flex flex-row items-center justify-center rounded-md text-white hover:bg-blue-800 transition-all duration-150 ease-linear ${
+							loading ? 'opacity-50 bg-blue-950 hover:bg-blue-950' : ''
+						}`}
 					>
 						Crear
 					</button>
