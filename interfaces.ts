@@ -83,6 +83,11 @@ export interface DataSelectSector extends DataSelect {
 	nombre_sector: string;
 }
 
+export interface DataSelectService extends DataSelect {
+	nombre_service: string;
+	tipo: string;
+}
+
 export interface ServiceReceivable {
 	id: string;
 	motivo: string;
