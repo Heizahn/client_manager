@@ -190,10 +190,10 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 				nombre
 				),
 			services(
-				nombre
+				nombre_service
 				),
 			sectors(
-				nombre
+				nombre_sector
 				)
 		`,
 		)
@@ -201,18 +201,18 @@ export async function fetchClientById(id: string): Promise<ClientDetails> {
 
 	console.log(data);
 	if (error) {
-		console.log(error);
+		throw new Error('Debes estar logeado para acceder a este recurso');
 	}
 
 	if (!data) {
-		throw new Error('Client not found');
+		throw new Error('Cliente no encontrado');
 	}
 
 	return data.map((client: any) => {
 		const { routers, services, sectors } = client;
 		const router = routers?.nombre;
-		const service = services?.nombre;
-		const sector = sectors?.nombre;
+		const service = services?.nombre_service;
+		const sector = sectors?.nombre_sector;
 		return {
 			...client,
 			router,

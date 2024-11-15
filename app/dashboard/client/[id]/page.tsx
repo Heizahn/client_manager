@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import NavCliente from '@/components/clientDetails/navCliente';
 import ServiceReceivable from '@/components/serviceReceivable/serviceReceivable';
+import { toast } from 'react-toastify';
 
 export default function Page() {
 	const { id } = useParams();
@@ -19,7 +20,9 @@ export default function Page() {
 	});
 
 	useEffect(() => {
-		fetchClientById(id as string).then((client) => setClient(client));
+		fetchClientById(id as string)
+			.then((client) => setClient(client))
+			.catch((err) => toast.error(err.message));
 	}, [id]);
 
 	return (
