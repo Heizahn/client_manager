@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 interface Breadcrumb {
 	label: string;
-	href: string;
+	href?: string;
 	active?: boolean;
 }
 
@@ -12,14 +12,14 @@ export default function Breadcrumbs({ breadcrumbs }: { breadcrumbs: Breadcrumb[]
 			<ol className='flex text-base'>
 				{breadcrumbs.map((breadcrumb, index) => (
 					<li
-						key={breadcrumb.href}
+						key={index}
 						aria-current={breadcrumb.active}
 						className={`${breadcrumb.active ? 'text-white' : 'text-gray-500'}`}
 					>
 						{breadcrumb.active ? (
 							<span>{breadcrumb.label}</span>
 						) : (
-							<Link href={breadcrumb.href}>{breadcrumb.label}</Link>
+							<Link href={breadcrumb.href as string}>{breadcrumb.label}</Link>
 						)}
 						{index < breadcrumbs.length - 1 ? (
 							<span className='mx-3 inline-block'>/</span>
