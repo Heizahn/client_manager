@@ -7,6 +7,7 @@ import type {
 	CreateService,
 	DataSelect,
 	DataSelectSector,
+	DataSelectRouter,
 } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
@@ -147,7 +148,7 @@ export async function fetchCreateService(values: CreateService) {
 	return 'Servicio creado exitosamente';
 }
 
-export async function fetchDataSelectRouter(): Promise<DataSelect[]> {
+export async function fetchDataSelectRouter(): Promise<DataSelectRouter[]> {
 	noStore();
 	const supabase = await createClient();
 	const res = await supabase
@@ -162,7 +163,7 @@ export async function fetchDataSelectRouter(): Promise<DataSelect[]> {
 		return [];
 	}
 
-	return res.data as unknown as DataSelect[];
+	return res.data as unknown as DataSelectRouter[];
 }
 
 export async function fetchDataSelectSector(): Promise<DataSelectSector[]> {

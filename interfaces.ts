@@ -75,6 +75,10 @@ export interface DataSelect {
 	id: string;
 }
 
+export interface DataSelectRouter extends DataSelect {
+	nombre: string;
+}
+
 export interface DataSelectSector extends DataSelect {
 	nombre_sector: string;
 }
