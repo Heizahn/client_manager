@@ -33,6 +33,10 @@ export default function Page() {
 				}
 			})
 			.catch((err) => {
+				if (err.message === 'Failed to fetch') {
+					toast.error('Error al conectar con la API de Whatsapp');
+					return;
+				}
 				toast.error(err.message);
 			});
 	}, [qrCode, socket]);
