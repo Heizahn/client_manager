@@ -5,7 +5,7 @@ import { InitialValues, schemaValidate } from './schemaValidate';
 import { fetchDataSelect } from '@/lib/fetchDataSystems';
 import { DataSelect } from '@/interfaces';
 import { fetchCreateClient } from '@/lib/fetchData';
-import { useCountContextClients } from '@/context/countContext';
+import { useStore } from '@/store/storeCount';
 
 export default function NewClient({
 	setShow,
@@ -15,11 +15,12 @@ export default function NewClient({
 	const [sectors, setSectors] = useState<DataSelect[]>([]);
 	const [routers, setRouters] = useState<DataSelect[]>([]);
 	const [services, setServices] = useState<DataSelect[]>([]);
-	const { Recount } = useCountContextClients();
+
+	const { Recount } = useStore((state) => state);
 
 	const handlerSubmit = (values: any) => {
 		const data = {
-			nombre: values.nombre + values.apellido,
+			nombre: values.nombre + ' ' + values.apellido,
 			telefono: values.telefono,
 			identificacion: values.identificacion,
 			direccion: values.direccion,

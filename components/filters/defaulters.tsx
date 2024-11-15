@@ -1,11 +1,11 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCountContextClients } from '@/context/countContext';
+import { useStore } from '@/store/storeCount';
 
 export default function Solvents() {
 	const path = usePathname();
-	const { clientsCountDefaulters } = useCountContextClients();
+	const { DefaultersCount } = useStore((state) => state);
 
 	const isActive = path.includes('defaulters');
 
@@ -16,7 +16,7 @@ export default function Solvents() {
 				!isActive ? '' : 'underline underline-offset-4'
 			} hover:underline underline-offset-4 px-3 text-orange-500 `}
 		>
-			Morosos {clientsCountDefaulters}
+			Morosos {DefaultersCount}
 		</Link>
 	);
 }

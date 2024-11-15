@@ -1,12 +1,16 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { useCountContextClients } from '@/context/countContext';
+import { useStore } from '@/store/storeCount';
+import { useEffect } from 'react';
 
 export default function All() {
 	const path = usePathname();
 
-	const { clientsCountAll } = useCountContextClients();
+	const { AllCount, Recount } = useStore((state) => state);
+	useEffect(() => {
+		Recount();
+	}, []);
 
 	const isActive = path === '/dashboard/clients';
 	return (
@@ -16,7 +20,7 @@ export default function All() {
 				!isActive ? '' : 'underline underline-offset-4'
 			} hover:underline underline-offset-4 px-3 `}
 		>
-			Todos {clientsCountAll}
+			Todos {AllCount}
 		</Link>
 	);
 }

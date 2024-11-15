@@ -44,7 +44,8 @@ export async function fetchSolventsClients(): Promise<Client[]> {
 			'id, nombre, identificacion,telefono, ipv4, saldo, estado, services(nombre), sectors(nombre)',
 		)
 		.gte('saldo', 0)
-		.order('nombre');
+		.order('nombre')
+		.eq('estado', true);
 
 	if (error) {
 		console.log(error);
@@ -135,34 +136,33 @@ export async function fetchSuspendedClients(): Promise<Client[]> {
 export async function fetchCountClients(): Promise<number> {
 	noStore();
 	const supabase = await createClient();
-	const { count } = await supabase
-		.from('clients')
-		.select('*', { count: 'exact', head: true });
+	const { data } = await supabase.from('clients').select('id');
 
-	return count || 0;
+	return data?.length || 0;
 }
 
 export async function fetchCountSolventsClients(): Promise<number> {
 	noStore();
 	const supabase = await createClient();
-	const { count } = await supabase
+	const { data } = await supabase
 		.from('clients')
-		.select('*', { count: 'exact', head: true })
-		.gte('saldo', 0);
+		.select('id')
+		.gte('saldo', 0)
+		.eq('estado', true);
 
-	return count || 0;
+	return data?.length || 0;
 }
 
 export async function fetchCountDefaultersClients(): Promise<number> {
 	noStore();
 	const supabase = await createClient();
-	const { count } = await supabase
+	const { data } = await supabase
 		.from('clients')
-		.select('*', { count: 'exact', head: true })
+		.select('id')
 		.lt('saldo', 0)
 		.eq('estado', true);
 
-	return count || 0;
+	return data?.length || 0;
 }
 
 export async function fetchCountSuspendedClients(): Promise<number> {
@@ -170,7 +170,7 @@ export async function fetchCountSuspendedClients(): Promise<number> {
 	const supabase = await createClient();
 	const { count } = await supabase
 		.from('clients')
-		.select('*', { count: 'exact', head: true })
+		.select('id', { count: 'exact', head: true })
 		.eq('estado', false);
 
 	return count || 0;
