@@ -7,9 +7,11 @@ import { fetchClientHeaderById } from '@/lib/fetchData';
 import { toast } from 'react-toastify';
 import NavCliente from './navCliente';
 import LoaderHeader from './loaderHeader';
+import { useStoreClientView } from '@/store/storeClientView';
 
 export default function HeaderClient({ clientId }: { clientId: string }) {
 	const [client, setClient] = useState<ClientDetailsHeader | null>(null);
+	const { details } = useStoreClientView();
 
 	useEffect(() => {
 		fetchClientHeaderById(clientId)
@@ -79,9 +81,11 @@ export default function HeaderClient({ clientId }: { clientId: string }) {
 							</div>
 						</div>
 						<div className='flex flex-row items-center gap-6 mr-2'>
-							<button className='hover:underline hover:underline-offset-4'>
-								Editar
-							</button>
+							{details && (
+								<button className='hover:underline hover:underline-offset-4'>
+									Editar
+								</button>
+							)}
 							<button className='hover:underline hover:underline-offset-4'>
 								Suspender
 							</button>

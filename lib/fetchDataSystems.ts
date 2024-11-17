@@ -8,6 +8,8 @@ import type {
 	DataSelectSector,
 	DataSelectRouter,
 	DataSelectService,
+	DataSelectProfile,
+	ClientPayment,
 } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
@@ -194,4 +196,19 @@ export async function fetchDataSelectService(): Promise<DataSelectService[]> {
 	}
 
 	return res.data as unknown as DataSelectService[];
+}
+
+export async function fetchDataSelectProfile() {
+	noStore();
+	const supabase = await createClient();
+	const res = await supabase.from('profiles').select(`id, name`).order('name');
+
+	if (res.error) {
+		throw new Error('Error al obtener los perfiles');
+	}
+	if (!res.data) {
+		return [];
+	}
+
+	return res.data as unknown as DataSelectProfile[];
 }

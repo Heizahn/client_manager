@@ -4,7 +4,7 @@ import NavLinks from './navLinks';
 import { getUserName } from '@/lib/actions';
 
 export default async function SideNav() {
-	const userName = await getUserName();
+	const user = await getUserName();
 
 	return (
 		<div className='flex h-full flex-col px-3 py-4 md:px-2'>
@@ -15,7 +15,7 @@ export default async function SideNav() {
 				<div className='flex flex-col justify-center'>
 					<h1 className='text-white font-bold text-2xl tex'>Clientes LV</h1>
 
-					{userName && <span className='text-white text-lg'>{userName} </span>}
+					{user?.name && <span className='text-white text-lg'>{user?.name} </span>}
 				</div>
 			</Link>
 			<div className='flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2'>

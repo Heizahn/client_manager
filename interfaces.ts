@@ -109,10 +109,39 @@ export interface PaymentStruct {
 	motivo: string;
 	created_at: string;
 	tipo: string;
-	creado_por: string;
-	recibido_por: string;
 	monto_ref: number;
 	monto_bs: number;
 	referencia: string;
 	estado: boolean;
+	created_by: string;
+	recibido_por: string;
+}
+
+export interface DataSelectProfile {
+	id: string;
+	name: string;
+}
+
+export interface ServicePayment {
+	id: string;
+	motivo: string;
+}
+
+export interface ClientPayment {
+	nombre: string;
+	identificacion: string;
+	service_receivable: ServicePayment[] | null;
+}
+
+export interface PayValues {
+	cliente: string;
+	created_by: string;
+	tipo: string;
+	monto_ref: number;
+	monto_bs: number;
+	referencia: string;
+	motivo: string;
+	recibido_por: string;
+	service_receivable_id: string;
+	saldo: number;
 }

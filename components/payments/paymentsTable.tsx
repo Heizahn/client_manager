@@ -25,10 +25,8 @@ export default function PaymentsTable({ paymentClient }: { paymentClient: Paymen
 						))
 					) : (
 						<tr>
-							<td colSpan={8}>
-								<div className='pl-4'>
-									<p>No hay pagos</p>
-								</div>
+							<td colSpan={8} className='pl-4'>
+								No hay pagos
 							</td>
 						</tr>
 					)}

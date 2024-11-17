@@ -1,9 +1,17 @@
 'use server';
-import { ClientDetailsHeader, CreateClient, ServiceReceivable } from '@/interfaces';
+import {
+	ClientDetailsHeader,
+	ClientPayment,
+	CreateClient,
+	PaymentStruct,
+	PayValues,
+	ServiceReceivable,
+} from '@/interfaces';
 import { createClient, createClientDetails, createClientTables } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 import { ClientDetailsType, ClientType } from './typesConsultas';
+import e from 'express';
 
 export async function fetchAllClients(): Promise<ClientType[]> {
 	noStore();
@@ -215,7 +223,8 @@ export async function fetchServicesReceivable(clientId: string): Promise<Service
 	const { data, error } = await supabase
 		.from('service_receivable')
 		.select('id, motivo, created_at, monto, deuda, estado')
-		.eq('cliente', clientId);
+		.eq('cliente', clientId)
+		.order('created_at', { ascending: false });
 
 	if (error) {
 		console.log(error);
@@ -226,4 +235,82 @@ export async function fetchServicesReceivable(clientId: string): Promise<Service
 	}
 
 	return data;
+}
+
+export async function fetchClientPayment(clientId: string) {
+	noStore();
+	const supabase = await createClient();
+	const { data, error } = await supabase
+		.from('clients')
+		.select(
+			`
+      nombre, 
+      identificacion, 
+      service_receivable(id, motivo)
+    `,
+		)
+		.eq('id', clientId)
+		.filter('service_receivable.estado', 'eq', true)
+		.lt('service_receivable.deuda', 0);
+
+	if (error) {
+		throw new Error('Error al obtener los pagos');
+	}
+	if (!data) {
+		return null;
+	}
+
+	return data[0] as unknown as ClientPayment;
+}
+
+export async function fetchClientPay(values: PayValues) {
+	noStore();
+	const supabase = await createClient();
+
+	const { error } = await supabase
+		.from('payments')
+		.insert({
+			...values,
+			estado: true,
+			service_receivable_id: values.service_receivable_id || null,
+		});
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	return 'Pago creado exitosamente';
+}
+
+export async function fetchPaysByClient(clientId: string): Promise<PaymentStruct[]> {
+	noStore();
+	const supabase = await createClient();
+	const { data, error } = await supabase
+		.from('payments')
+		.select(
+			'motivo, created_at, tipo, monto_ref, monto_bs, referencia, estado, created_by, recibido_por',
+		)
+		.eq('cliente', clientId);
+
+	if (error) {
+		console.log(error);
+		throw new Error('Error al obtener los pagos');
+	}
+
+	const { data: dataCreator } = await supabase
+		.from('profiles')
+		.select('name')
+		.eq('id', data?.[0]?.created_by);
+
+	const { data: dataRecibido } = await supabase
+		.from('profiles')
+		.select('name')
+		.eq('id', data?.[0]?.recibido_por);
+
+	return data?.map((payment) => {
+		return {
+			...payment,
+			created_by: dataCreator?.[0]?.name as string,
+			recibido_por: dataRecibido?.[0]?.name as string,
+		};
+	}) as unknown as PaymentStruct[];
 }

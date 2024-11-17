@@ -28,7 +28,7 @@ export async function logout() {
 	redirect('/login');
 }
 
-export async function getUserName() {
+export async function getUserName(): Promise<{ id: string; name: string } | null> {
 	const supabase = await createClient();
 	const { data, error } = await supabase.auth.getUser();
 
@@ -42,5 +42,5 @@ export async function getUserName() {
 
 	const { name } = profileData![0];
 
-	return name;
+	return { id, name } as { id: string; name: string };
 }
