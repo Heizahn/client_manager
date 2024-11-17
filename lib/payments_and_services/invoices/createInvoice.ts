@@ -1,4 +1,4 @@
-import { createClientExterno } from '../supabase/clientExterno';
+import { createClientExterno } from '../../supabase/clientExterno';
 
 interface Values {
 	clientId: string;

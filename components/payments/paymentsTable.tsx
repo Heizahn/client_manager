@@ -19,17 +19,9 @@ export default function PaymentsTable({ paymentClient }: { paymentClient: Paymen
 					</tr>
 				</thead>
 				<tbody>
-					{paymentClient.length > 0 ? (
-						paymentClient.map((payment: PaymentStruct) => (
-							<PaymentRow key={payment.id} payment={payment} />
-						))
-					) : (
-						<tr>
-							<td colSpan={8} className='pl-4'>
-								No hay pagos
-							</td>
-						</tr>
-					)}
+					{paymentClient.map((payment: PaymentStruct, idx: number) => (
+						<PaymentRow key={idx} payment={payment} />
+					))}
 				</tbody>
 			</table>
 		</div>

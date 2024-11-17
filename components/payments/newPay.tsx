@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 import { ClientPayment, DataSelectProfile } from '@/interfaces';
 import { fetchDataSelectProfile } from '@/lib/fetchDataSystems';
 import { toast } from 'react-toastify';
-import { fetchClientPay, fetchClientPayment } from '@/lib/fetchData';
+import { fetchClientPayment } from '@/lib/fetchData';
+import { fetchClientPay } from '@/lib/payments_and_services/payments';
 import SkeletonPay from './skeletonPay';
-import { useRouter } from 'next/navigation';
+import { usePaymentContext } from './paymentContext';
 
 export default function NewPay({
 	user,
@@ -22,7 +23,7 @@ export default function NewPay({
 	const [loading, setLoading] = useState(true);
 	const [profiles, setProfiles] = useState<DataSelectProfile[]>([]);
 	const [client, setClient] = useState<ClientPayment | null>(null);
-	const router = useRouter();
+	const { reLoadData } = usePaymentContext();
 
 	useEffect(() => {
 		fetchClientPayment(clientId)
@@ -55,7 +56,6 @@ export default function NewPay({
 							monto_bs: Math.round(values.monto_bs * 100),
 							monto_ref: Math.round(values.monto_ref * 100),
 							referencia: values.referencia,
-							saldo: Math.round(values.monto_ref * 100),
 							service_receivable_id: values.service_receivable_id,
 							tipo: values.tipo,
 							recibido_por: values.recibido_por,
@@ -63,7 +63,7 @@ export default function NewPay({
 						})
 							.then((res) => {
 								toast.success(res);
-								router.refresh();
+								reLoadData(clientId);
 							})
 							.catch((err) => toast.error(err.message))
 							.finally(() => {

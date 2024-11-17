@@ -3,25 +3,21 @@ import { useStoreClientView } from '@/store/storeClientView';
 import { useEffect, useState } from 'react';
 import SkeletonPayment from './skeletonPayment';
 import PaymentsTable from './paymentsTable';
-import { PaymentStruct } from '@/interfaces';
 import ShowFormPay from './showFormPay';
-import { fetchPaysByClient } from '@/lib/fetchData';
-import { toast } from 'react-toastify';
+import { usePaymentContext } from './paymentContext';
 
 export default function PaymentsView({ clientId }: { clientId: string }) {
 	const { payments } = useStoreClientView();
 	const [loading, setLoading] = useState(true);
-	const [paymentClient, setPaymentClient] = useState<PaymentStruct[]>([]);
+	const { paymentClient, loadData } = usePaymentContext();
 
 	useEffect(() => {
-		fetchPaysByClient(clientId)
-			.then((res) => setPaymentClient(res))
-			.catch((err) => toast.error(err.message))
-			.finally(() => {
+		loadData(clientId).then((res) => {
+			if (res.ok) {
 				setLoading(false);
-			});
+			}
+		});
 	}, [clientId]);
-
 	return (
 		payments && (
 			<div className='flex flex-wrap bg-gray-800 px-4 pb-8 pt-4 rounded-b-md'>
@@ -31,8 +27,10 @@ export default function PaymentsView({ clientId }: { clientId: string }) {
 				</header>{' '}
 				{loading ? (
 					<SkeletonPayment />
-				) : (
+				) : paymentClient.length > 0 ? (
 					<PaymentsTable paymentClient={paymentClient} />
+				) : (
+					<div className='flex items-center justify-center'>No hay pagos</div>
 				)}
 			</div>
 		)

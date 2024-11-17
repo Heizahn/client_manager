@@ -4,14 +4,12 @@ import {
 	ClientPayment,
 	CreateClient,
 	PaymentStruct,
-	PayValues,
 	ServiceReceivable,
 } from '@/interfaces';
 import { createClient, createClientDetails, createClientTables } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
-import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
+import { unstable_noStore as noStore } from 'next/cache';
 import { ClientDetailsType, ClientType } from './typesConsultas';
-import e from 'express';
 
 export async function fetchAllClients(): Promise<ClientType[]> {
 	noStore();
@@ -222,7 +220,7 @@ export async function fetchServicesReceivable(clientId: string): Promise<Service
 	const { data, error } = await supabase
 		.from('service_receivable')
 		.select('id, motivo, created_at, monto, deuda, estado')
-		.eq('cliente', clientId)
+		.eq('client_id', clientId)
 		.order('created_at', { ascending: false });
 
 	if (error) {
@@ -232,6 +230,8 @@ export async function fetchServicesReceivable(clientId: string): Promise<Service
 	if (!data) {
 		return [];
 	}
+
+	console.log(data);
 
 	return data;
 }
@@ -262,22 +262,6 @@ export async function fetchClientPayment(clientId: string) {
 	return data[0] as unknown as ClientPayment;
 }
 
-export async function fetchClientPay(values: PayValues) {
-	noStore();
-	const supabase = await createClient();
-
-	const { error } = await supabase.from('payments').insert({
-		...values,
-		estado: true,
-		service_receivable_id: values.service_receivable_id || null,
-	});
-	if (error) {
-		throw new Error(error.message);
-	}
-
-	return 'Pago creado exitosamente';
-}
-
 export async function fetchPaysByClient(clientId: string): Promise<PaymentStruct[]> {
 	noStore();
 	const supabase = await createClient();
@@ -286,7 +270,8 @@ export async function fetchPaysByClient(clientId: string): Promise<PaymentStruct
 		.select(
 			'motivo, created_at, tipo, monto_ref, monto_bs, referencia, estado, created_by, recibido_por',
 		)
-		.eq('cliente', clientId);
+		.eq('cliente', clientId)
+		.order('created_at', { ascending: false });
 
 	if (error) {
 		console.log(error);

@@ -143,5 +143,4 @@ export interface PayValues {
 	motivo: string;
 	recibido_por: string;
 	service_receivable_id: string;
-	saldo: number;
 }

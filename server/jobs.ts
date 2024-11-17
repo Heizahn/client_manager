@@ -1,4 +1,4 @@
-import { createInvoicesAutomatic } from '../lib/invoices/createInvoicesAutomatic';
+import { createInvoicesAutomatic } from '../lib/payments_and_services/invoices/createInvoicesAutomatic';
 import cron from 'node-cron';
 
 cron.schedule(
