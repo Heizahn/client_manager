@@ -212,7 +212,6 @@ export async function fetchCreateClient(values: CreateClient): Promise<string> {
 		throw new Error(error.message);
 	}
 
-	revalidatePath('/dashboard/clients');
 	return 'Cliente creado exitosamente';
 }
 
@@ -267,13 +266,11 @@ export async function fetchClientPay(values: PayValues) {
 	noStore();
 	const supabase = await createClient();
 
-	const { error } = await supabase
-		.from('payments')
-		.insert({
-			...values,
-			estado: true,
-			service_receivable_id: values.service_receivable_id || null,
-		});
+	const { error } = await supabase.from('payments').insert({
+		...values,
+		estado: true,
+		service_receivable_id: values.service_receivable_id || null,
+	});
 	if (error) {
 		throw new Error(error.message);
 	}

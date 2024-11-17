@@ -1,4 +1,4 @@
-import All from '@/components/filters/all';
+import All from '@/components/filters/filterStatusClient';
 import Defaulters from '@/components/filters/defaulters';
 import Solvents from '@/components/filters/solvents';
 import Suspended from '@/components/filters/suspended';

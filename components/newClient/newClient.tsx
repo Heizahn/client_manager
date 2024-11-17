@@ -9,9 +9,9 @@ import {
 } from '@/lib/fetchDataSystems';
 import { DataSelectRouter, DataSelectSector, DataSelectService } from '@/interfaces';
 import { fetchCreateClient } from '@/lib/fetchData';
-import { useStore } from '@/store/storeCount';
 import { toast } from 'react-toastify';
 import ButtonSubmit from '../buttonSubmit';
+import { useRouter } from 'next/navigation';
 
 export default function NewClient({
 	setShow,
@@ -23,7 +23,7 @@ export default function NewClient({
 	const [services, setServices] = useState<DataSelectService[]>([]);
 	const [loading, setLoading] = useState(false);
 
-	const { Recount } = useStore((state) => state);
+	const router = useRouter();
 
 	const handlerSubmit = (values: ClientValues) => {
 		setLoading(true);
@@ -52,7 +52,7 @@ export default function NewClient({
 				}
 			})
 			.finally(() => {
-				Recount();
+				router.refresh();
 				setLoading(false);
 			});
 	};
