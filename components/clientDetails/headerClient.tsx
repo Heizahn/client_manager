@@ -15,11 +15,11 @@ export default function HeaderClient({ clientId }: { clientId: string }) {
 		loadData(clientId);
 	}, [clientId]);
 
-	if (!clientStatus) {
+	if (typeof clientStatus.saldo !== 'number') {
 		return <LoaderHeader />;
 	}
 	return (
-		clientStatus && (
+		typeof clientStatus.saldo === 'number' && (
 			<>
 				<div className='mt-2 flex flex-row justify-center items-center py-2 rounded-md bg-gray-800  '>
 					<h2 className='text-center text-2xl font-bold'>Detalles del Cliente</h2>

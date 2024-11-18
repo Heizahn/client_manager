@@ -4,13 +4,14 @@ import { createContext, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { fetchClientStatusById } from '@/lib/fetchData';
 
+interface ClientStatusType {
+	nombre: string;
+	direccion: string;
+	saldo: number | null;
+	estado: boolean;
+}
 interface ClientDetailContextType {
-	clientStatus: {
-		nombre: string;
-		direccion: string;
-		saldo: number;
-		estado: boolean;
-	};
+	clientStatus: ClientStatusType;
 	loadData: (id: string) => Promise<{ ok: boolean }>;
 	reLoadData: (id: string) => Promise<void>;
 }
@@ -19,18 +20,18 @@ const ClientDetailContext = createContext<ClientDetailContextType>({
 	clientStatus: {
 		nombre: '',
 		direccion: '',
-		saldo: 0,
-		estado: true,
+		saldo: null,
+		estado: false,
 	},
 	loadData: () => Promise.resolve({ ok: true }),
 	reLoadData: () => Promise.resolve(),
 });
 
 export function ClientDetailProvider({ children }: { children: React.ReactNode }) {
-	const [clientStatus, setClientStaus] = useState({
+	const [clientStatus, setClientStaus] = useState<ClientStatusType>({
 		nombre: '',
 		direccion: '',
-		saldo: 0,
+		saldo: null,
 		estado: true,
 	});
 
