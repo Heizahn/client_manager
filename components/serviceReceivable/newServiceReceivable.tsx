@@ -2,13 +2,13 @@
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { InitialValues, schemaValidate } from './schemaValidate';
-import { CreateService } from '@/interfaces';
-import { fetchCreateService } from '@/lib/fetchDataSystems';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import ButtonSubmit from '../buttonSubmit';
 import montoPermitido from '@/lib/montoPermitido';
 import { createInvoice } from '@/lib/payments_and_services/invoices/createInvoice';
+import { useServiceReceivableContext } from './serviceReceicvableContex';
+import { useClientDetailContext } from '../clientDetails/clientDetailContex';
 
 export default function NewServiceReceivable({
 	clientId,
@@ -18,6 +18,9 @@ export default function NewServiceReceivable({
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [loading, setLoading] = useState(false);
+	const { reLoadData } = useServiceReceivableContext();
+	const { reLoadData: reLoadClient } = useClientDetailContext();
+
 	const handleSubmit = (values: { motivo: string; monto: number }) => {
 		setLoading(true);
 		console.log(values);
@@ -31,6 +34,9 @@ export default function NewServiceReceivable({
 			.then((res) => {
 				if (res) {
 					toast.success(res);
+
+					reLoadClient(clientId);
+					reLoadData(clientId);
 					setShow(false);
 				}
 			})

@@ -3,7 +3,7 @@ import PaymentRow from './paymentRow';
 
 export default function PaymentsTable({ paymentClient }: { paymentClient: PaymentStruct[] }) {
 	return (
-		<div className='w-full max-h-[calc(100vh_-_7.5rem)] overflow-y-auto scrollbar-none rounded-b-md'>
+		<div className='w-full max-h-[calc(100vh_-_22rem)] overflow-y-auto scrollbar-none rounded-b-md'>
 			<table className='w-full table-auto bg-gray-800 '>
 				<thead className='sticky top-0 bg-gray-800 mt-2'>
 					<tr className='text-left text-lg '>

@@ -192,6 +192,28 @@ export async function fetchClientHeaderById(id: string): Promise<ClientDetailsHe
 	return data[0] as unknown as ClientDetailsHeader;
 }
 
+export async function fetchClientStatusById(
+	id: string,
+): Promise<{ saldo: number; estado: boolean; nombre: string; direccion: string }> {
+	noStore();
+	const supabase = await createClient();
+	const { data, error } = await supabase
+		.from('clients')
+		.select('saldo, estado, nombre, direccion')
+		.eq('id', id);
+
+	if (error) {
+		throw new Error('Error al buscar el cliente');
+	}
+
+	return data[0] as unknown as {
+		saldo: number;
+		estado: boolean;
+		nombre: string;
+		direccion: string;
+	};
+}
+
 export async function fetchCreateClient(values: CreateClient): Promise<string> {
 	noStore();
 

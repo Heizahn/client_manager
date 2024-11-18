@@ -1,29 +1,25 @@
 'use client';
-import { ClientDetailsHeader } from '@/interfaces';
 import Breadcrumbs from '../viewclients/breadcrums';
 import { formatMoney } from '../formatMoney';
-import { useEffect, useState } from 'react';
-import { fetchClientHeaderById } from '@/lib/fetchData';
-import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 import NavCliente from './navCliente';
 import LoaderHeader from './loaderHeader';
 import { useStoreClientView } from '@/store/storeClientView';
+import { useClientDetailContext } from './clientDetailContex';
 
 export default function HeaderClient({ clientId }: { clientId: string }) {
-	const [client, setClient] = useState<ClientDetailsHeader | null>(null);
 	const { details } = useStoreClientView();
+	const { clientStatus, loadData } = useClientDetailContext();
 
 	useEffect(() => {
-		fetchClientHeaderById(clientId)
-			.then((client) => setClient(client))
-			.catch((err) => toast.error(err.message));
+		loadData(clientId);
 	}, [clientId]);
 
-	if (!client) {
+	if (!clientStatus) {
 		return <LoaderHeader />;
 	}
 	return (
-		client && (
+		clientStatus && (
 			<>
 				<div className='mt-2 flex flex-row justify-center items-center py-2 rounded-md bg-gray-800  '>
 					<h2 className='text-center text-2xl font-bold'>Detalles del Cliente</h2>
@@ -38,7 +34,7 @@ export default function HeaderClient({ clientId }: { clientId: string }) {
 							},
 							{
 								label: 'Cliente',
-								href: `/dashboard/client/${client.id}`,
+								href: `/dashboard/client/${clientId}`,
 								active: true,
 							},
 						]}
@@ -47,36 +43,38 @@ export default function HeaderClient({ clientId }: { clientId: string }) {
 					<div className='flex flex-row gap-4 items-start justify-between px-4 py-2'>
 						<div className='flex flex-col'>
 							<div className='flex flex-row items-center gap-3'>
-								<h3 className='text-3xl font-bold'>{client.nombre}</h3>
+								<h3 className='text-3xl font-bold'>{clientStatus.nombre}</h3>
 								<span
 									className={`${
-										!client.estado
+										!clientStatus.estado
 											? 'text-red-500'
-											: client.saldo < 0
+											: clientStatus.saldo < 0
 											? 'text-orange-500'
 											: 'text-green-500'
 									} flex flex-row items-center gap-1`}
 								>
 									<div
 										className={`${
-											!client.estado
+											!clientStatus.estado
 												? 'bg-red-500'
-												: client.saldo < 0
+												: clientStatus.saldo < 0
 												? 'bg-orange-500'
 												: 'bg-green-500'
 										} w-4 h-4 rounded-full`}
 									></div>
-									{client.estado ? 'Activo' : 'Suspendido'}
+									{clientStatus.estado ? 'Activo' : 'Suspendido'}
 								</span>
 							</div>
 							<div className='flex flex-row gap-2 mt-2 text-sm mb-2'>
-								<p>{client.direccion}</p>
+								<p>{clientStatus.direccion}</p>
 								<span
 									className={`${
-										client.saldo < 0 ? 'text-red-500' : 'text-green-500'
+										clientStatus.saldo < 0
+											? 'text-red-500'
+											: 'text-green-500'
 									} flex flex-row items-center gap-1`}
 								>
-									Saldo: {formatMoney(client.saldo)}$
+									Saldo: {formatMoney(clientStatus.saldo)}$
 								</span>
 							</div>
 						</div>

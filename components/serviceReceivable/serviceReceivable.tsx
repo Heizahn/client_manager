@@ -8,23 +8,21 @@ import { toast } from 'react-toastify';
 import { useStoreClientView } from '@/store/storeClientView';
 import SkeletonTable from '../skeletonTable';
 import NewServiceReceivable from './newServiceReceivable';
+import { useServiceReceivableContext } from './serviceReceicvableContex';
 
 export default function ServiceReceivable({ clientId }: { clientId: string }) {
-	const [servicesReceivables, setServicesReceivables] = useState<ServiceReceivableType[]>(
-		[],
-	);
 	const { invoices } = useStoreClientView();
+	const { serviceReceivable, loadData } = useServiceReceivableContext();
 	const [loading, setLoading] = useState(true);
 	const [showFormNewService, setShowFormNewService] = useState(false);
 
 	useEffect(() => {
-		fetchServicesReceivable(clientId)
-			.then((res) => setServicesReceivables(res))
-			.catch((err) => toast.error(err.message))
-			.finally(() => {
+		loadData(clientId).then((res) => {
+			if (res.ok) {
 				setLoading(false);
-			});
-	}, [clientId]);
+			}
+		});
+	}, [clientId, invoices]);
 
 	return (
 		invoices && (
@@ -48,8 +46,8 @@ export default function ServiceReceivable({ clientId }: { clientId: string }) {
 				</header>
 				{loading ? (
 					<SkeletonTable />
-				) : servicesReceivables.length > 0 ? (
-					<ServiceReceivableTable servicesReceivables={servicesReceivables} />
+				) : serviceReceivable.length > 0 ? (
+					<ServiceReceivableTable servicesReceivables={serviceReceivable} />
 				) : (
 					<div className='flex items-center justify-center'>
 						No hay servicios por cobrar

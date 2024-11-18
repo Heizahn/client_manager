@@ -50,8 +50,6 @@ export async function validatePrepayment(client_id: string, deuda: number): Prom
 		prepayments_total += amount;
 	});
 
-	console.log('Abonos totales', prepayments_total);
-
 	const deudaActual = deuda + prepayments_total;
 
 	console.log('Deuda actual', deudaActual);
