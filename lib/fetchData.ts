@@ -270,7 +270,7 @@ export async function fetchPaysByClient(clientId: string): Promise<PaymentStruct
 		.select(
 			'motivo, created_at, tipo, monto_ref, monto_bs, referencia, estado, created_by, recibido_por',
 		)
-		.eq('cliente', clientId)
+		.eq('client_id', clientId)
 		.order('created_at', { ascending: false });
 
 	if (error) {

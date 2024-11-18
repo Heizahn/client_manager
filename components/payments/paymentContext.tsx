@@ -25,7 +25,7 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
 			setPaymentClient(await fetchPaysByClient(id));
 			return { ok: true };
 		} catch (err) {
-			if (err instanceof Error) toast.error(err.message);
+			if (err instanceof Error) toast.error('Tabla de pagos: ' + err.message);
 			return { ok: true };
 		}
 	};

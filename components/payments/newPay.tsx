@@ -10,6 +10,7 @@ import { fetchClientPayment } from '@/lib/fetchData';
 import { fetchClientPay } from '@/lib/payments_and_services/payments';
 import SkeletonPay from './skeletonPay';
 import { usePaymentContext } from './paymentContext';
+import montoPermitido from '@/lib/montoPermitido';
 
 export default function NewPay({
 	user,
@@ -51,7 +52,7 @@ export default function NewPay({
 					}}
 					onSubmit={(values: PaymentValues) => {
 						fetchClientPay({
-							cliente: clientId,
+							client_id: clientId,
 							created_by: user.id,
 							monto_bs: Math.round(values.monto_bs * 100),
 							monto_ref: Math.round(values.monto_ref * 100),
@@ -300,26 +301,4 @@ export default function NewPay({
 			)}
 		</div>
 	);
-}
-
-function montoPermitido(e: React.ChangeEvent<HTMLInputElement>) {
-	let value = e.target.value;
-
-	if (value.length > 1 && value.startsWith('0') && !value.startsWith('0.')) {
-		value = value.substring(1); // Eliminar el primer carácter (el '0')
-	}
-
-	// Si el usuario escribe un punto como primer carácter, agrega un '0' antes
-	if (value === '.') {
-		e.target.value = '0.';
-		return;
-	}
-
-	const regex = /^(0|[1-9]\d*)(\.\d{0,2})?$/; // Expresión regular para permitir el formato deseado
-
-	if (!regex.test(value)) {
-		e.target.value = value.slice(0, -1); // Eliminar el último carácter ingresado si no cumple
-	}
-
-	e.target.value = value; // Eliminar el punto decimal si existe
 }

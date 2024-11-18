@@ -134,7 +134,7 @@ export interface ClientPayment {
 }
 
 export interface PayValues {
-	cliente: string;
+	client_id: string;
 	created_by: string;
 	tipo: string;
 	monto_ref: number;
@@ -143,4 +143,16 @@ export interface PayValues {
 	motivo: string;
 	recibido_por: string;
 	service_receivable_id: string;
+}
+
+export interface PrePayment {
+	amount: number;
+	client_id: string;
+	pay_id: string | null;
+}
+
+export interface LastPayment {
+	id: string;
+	monto_ref: number;
+	client_id: string;
 }

@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useStoreClientView } from '@/store/storeClientView';
 import SkeletonTable from '../skeletonTable';
+import NewServiceReceivable from './newServiceReceivable';
 
 export default function ServiceReceivable({ clientId }: { clientId: string }) {
 	const [servicesReceivables, setServicesReceivables] = useState<ServiceReceivableType[]>(
@@ -14,6 +15,7 @@ export default function ServiceReceivable({ clientId }: { clientId: string }) {
 	);
 	const { invoices } = useStoreClientView();
 	const [loading, setLoading] = useState(true);
+	const [showFormNewService, setShowFormNewService] = useState(false);
 
 	useEffect(() => {
 		fetchServicesReceivable(clientId)
@@ -29,7 +31,20 @@ export default function ServiceReceivable({ clientId }: { clientId: string }) {
 			<div className='flex flex-wrap bg-gray-800 px-4 pb-8 pt-4 rounded-b-md'>
 				<header className='w-full flex justify-between items-center'>
 					<h3 className='text-xl font-bold'>Servicios Por Cobrar</h3>
-					<button className='hover:underline hover:underline-offset-4'>Crear</button>
+					<button
+						onClick={() => {
+							setShowFormNewService(true);
+						}}
+						className='hover:underline hover:underline-offset-4'
+					>
+						Crear
+					</button>
+					{showFormNewService && (
+						<NewServiceReceivable
+							clientId={clientId}
+							setShow={setShowFormNewService}
+						/>
+					)}
 				</header>
 				{loading ? (
 					<SkeletonTable />
