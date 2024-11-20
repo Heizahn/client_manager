@@ -1,4 +1,3 @@
-'use client';
 import Breadcrumbs from '../viewclients/breadcrums';
 import { formatMoney } from '../formatMoney';
 import { useEffect } from 'react';
@@ -7,17 +6,23 @@ import LoaderHeader from './loaderHeader';
 import { useStoreClientView } from '@/store/storeClientView';
 import { useClientDetailContext } from './clientDetailContex';
 
-export default function HeaderClient({ clientId }: { clientId: string }) {
-	const { details } = useStoreClientView();
-	const { clientStatus, loadData } = useClientDetailContext();
+export default function HeaderClient({
+	clientStatus,
+	clientId,
+}: {
+	clientStatus: any;
+	clientId: string;
+}) {
+	// const { details } = useStoreClientView();
+	// const { clientStatus, loadData } = useClientDetailContext();
 
-	useEffect(() => {
-		loadData(clientId);
-	}, [clientId]);
+	// useEffect(() => {
+	// 	loadData(clientId);
+	// }, [clientId]);
 
-	if (typeof clientStatus.saldo !== 'number') {
-		return <LoaderHeader />;
-	}
+	// if (typeof clientStatus.saldo !== 'number') {
+	// 	return <LoaderHeader />;
+	// }
 	return (
 		typeof clientStatus.saldo === 'number' && (
 			<>
@@ -79,11 +84,11 @@ export default function HeaderClient({ clientId }: { clientId: string }) {
 							</div>
 						</div>
 						<div className='flex flex-row items-center gap-6 mr-2'>
-							{details && (
+							{/* {details && (
 								<button className='hover:underline hover:underline-offset-4'>
 									Editar
 								</button>
-							)}
+							)} */}
 							<button className='hover:underline hover:underline-offset-4'>
 								Suspender
 							</button>

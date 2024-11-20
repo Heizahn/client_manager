@@ -11,7 +11,7 @@ import { fetchClientPay } from '@/lib/payments_and_services/payments';
 import SkeletonPay from './skeletonPay';
 import { usePaymentContext } from './paymentContext';
 import montoPermitido from '@/lib/montoPermitido';
-import { useClientDetailContext } from '../clientDetails/clientDetailContex';
+import { useRouter } from 'next/navigation';
 
 export default function NewPay({
 	user,
@@ -25,8 +25,7 @@ export default function NewPay({
 	const [loading, setLoading] = useState(true);
 	const [profiles, setProfiles] = useState<DataSelectProfile[]>([]);
 	const [client, setClient] = useState<ClientPayment | null>(null);
-	const { reLoadData } = usePaymentContext();
-	const { reLoadData: reLoadClient } = useClientDetailContext();
+	const router = useRouter();
 
 	useEffect(() => {
 		fetchClientPayment(clientId)
@@ -66,12 +65,11 @@ export default function NewPay({
 						})
 							.then((res) => {
 								toast.success(res);
-								reLoadData(clientId);
-								reLoadClient(clientId);
 							})
 							.catch((err) => toast.error(err.message))
 							.finally(() => {
 								setShow(false);
+								router.refresh();
 							});
 					}}
 					validationSchema={schemaValidate}

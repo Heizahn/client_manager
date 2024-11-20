@@ -7,8 +7,7 @@ import { useState } from 'react';
 import ButtonSubmit from '../buttonSubmit';
 import montoPermitido from '@/lib/montoPermitido';
 import { createInvoice } from '@/lib/payments_and_services/invoices/createInvoice';
-import { useServiceReceivableContext } from './serviceReceicvableContex';
-import { useClientDetailContext } from '../clientDetails/clientDetailContex';
+import { useRouter } from 'next/navigation';
 
 export default function NewServiceReceivable({
 	clientId,
@@ -18,12 +17,10 @@ export default function NewServiceReceivable({
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [loading, setLoading] = useState(false);
-	const { reLoadData } = useServiceReceivableContext();
-	const { reLoadData: reLoadClient } = useClientDetailContext();
+	const router = useRouter();
 
 	const handleSubmit = (values: { motivo: string; monto: number }) => {
 		setLoading(true);
-		console.log(values);
 
 		createInvoice({
 			clientId: clientId,
@@ -34,9 +31,6 @@ export default function NewServiceReceivable({
 			.then((res) => {
 				if (res) {
 					toast.success(res);
-
-					reLoadClient(clientId);
-					reLoadData(clientId);
 					setShow(false);
 				}
 			})
@@ -45,6 +39,7 @@ export default function NewServiceReceivable({
 			})
 			.finally(() => {
 				setLoading(false);
+				router.refresh();
 			});
 	};
 

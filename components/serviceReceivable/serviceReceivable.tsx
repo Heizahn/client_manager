@@ -1,28 +1,21 @@
 'use client';
 
 import { ServiceReceivable as ServiceReceivableType } from '@/interfaces';
-import { fetchServicesReceivable } from '@/lib/fetchData';
 import ServiceReceivableTable from './serviceReceivableTable';
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
 import { useStoreClientView } from '@/store/storeClientView';
-import SkeletonTable from '../skeletonTable';
 import NewServiceReceivable from './newServiceReceivable';
 import { useServiceReceivableContext } from './serviceReceicvableContex';
 
-export default function ServiceReceivable({ clientId }: { clientId: string }) {
+export default function ServiceReceivable({
+	clientId,
+	serviceReceivable,
+}: {
+	clientId: string;
+	serviceReceivable: ServiceReceivableType[];
+}) {
 	const { invoices } = useStoreClientView();
-	const { serviceReceivable, loadData } = useServiceReceivableContext();
-	const [loading, setLoading] = useState(true);
 	const [showFormNewService, setShowFormNewService] = useState(false);
-
-	useEffect(() => {
-		loadData(clientId).then((res) => {
-			if (res.ok) {
-				setLoading(false);
-			}
-		});
-	}, [clientId, invoices]);
 
 	return (
 		invoices && (
@@ -44,9 +37,7 @@ export default function ServiceReceivable({ clientId }: { clientId: string }) {
 						/>
 					)}
 				</header>
-				{loading ? (
-					<SkeletonTable />
-				) : serviceReceivable.length > 0 ? (
+				{serviceReceivable.length > 0 ? (
 					<ServiceReceivableTable servicesReceivables={serviceReceivable} />
 				) : (
 					<div className='flex items-center justify-center'>

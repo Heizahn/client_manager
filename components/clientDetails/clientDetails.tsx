@@ -1,29 +1,15 @@
 'use client';
-
 import Detail from './detail';
 import DetailContainer from './detailContainer';
 import { formatDate } from '../dateFormat';
 import { formatMoney } from '../formatMoney';
 import { useStoreClientView } from '@/store/storeClientView';
-import { useEffect, useState } from 'react';
-import { fetchClientById } from '@/lib/fetchData';
-import { toast } from 'react-toastify';
+
 import SkeletonDetail from './skeletonDetail';
 import { ClientDetailsType } from '@/lib/typesConsultas';
-import { useClientDetailContext } from './clientDetailContex';
 
-export default function ClientDetailsById({ clientId }: { clientId: string }) {
+export default function ClientDetailsById({ client }: { client: ClientDetailsType }) {
 	const { details } = useStoreClientView();
-	const [client, setClient] = useState<ClientDetailsType | null>(null);
-	const {
-		clientStatus: { saldo, estado },
-	} = useClientDetailContext();
-
-	useEffect(() => {
-		fetchClientById(clientId)
-			.then((client) => setClient(client))
-			.catch((err) => toast.error(err.message));
-	}, [clientId]);
 
 	return (
 		details &&
@@ -75,8 +61,8 @@ export default function ClientDetailsById({ clientId }: { clientId: string }) {
 					<DetailContainer title='Balance'>
 						<Detail
 							title='Saldo:'
-							label={`${formatMoney(saldo)}$`}
-							className={saldo < 0 ? 'text-red-500' : 'text-green-500'}
+							label={`${formatMoney(client.saldo)}$`}
+							className={client.saldo < 0 ? 'text-red-500' : 'text-green-500'}
 						/>
 						<Detail title='Dia de Corte:' label={String(client.dia_corte)} />
 					</DetailContainer>
@@ -85,11 +71,11 @@ export default function ClientDetailsById({ clientId }: { clientId: string }) {
 					<DetailContainer title='Estado'>
 						<Detail
 							title='Estado:'
-							label={`${estado ? 'Activo' : 'Suspendido'}`}
+							label={`${client.estado ? 'Activo' : 'Suspendido'}`}
 							className={
-								!estado
+								!client.estado
 									? 'text-red-500'
-									: saldo < 0
+									: client.saldo < 0
 									? 'text-orange-500'
 									: 'text-green-500'
 							}

@@ -5,28 +5,33 @@ import { PaymentProvider } from '@/components/payments/paymentContext';
 import PaymentsView from '@/components/payments/paymentsView';
 import { ServiceReceivableProvider } from '@/components/serviceReceivable/serviceReceicvableContex';
 import ServiceReceivable from '@/components/serviceReceivable/serviceReceivable';
+import {
+	fetchClientById,
+	fetchClientPayment,
+	fetchClientStatusById,
+	fetchPaysByClient,
+	fetchServicesReceivable,
+} from '@/lib/fetchData';
+import { Suspense } from 'react';
 
 export default async function Page({ params }: { params: { id: string } }) {
 	const { id } = params;
+	const clientStatus = await fetchClientStatusById(id);
+	const clientDetail = await fetchClientById(id as string);
+	const serviceReceivable = await fetchServicesReceivable(id as string);
+	const paymentClient = await fetchPaysByClient(id as string);
 
 	return (
 		<main className='flex flex-col md:overflow-hidden'>
-			<ClientDetailProvider>
-				<HeaderClient clientId={id as string} />
+			<Suspense fallback={<div>Loading...</div>}>
+				<HeaderClient clientId={id as string} clientStatus={clientStatus} />
+			</Suspense>
 
-				{/* Details */}
-				<ClientDetailsById clientId={id as string} />
+			<ClientDetailsById client={clientDetail} />
 
-				{/* Invoices */}
-				<ServiceReceivableProvider>
-					<ServiceReceivable clientId={id as string} />
-				</ServiceReceivableProvider>
+			<ServiceReceivable clientId={id as string} serviceReceivable={serviceReceivable} />
 
-				{/* Payments */}
-				<PaymentProvider>
-					<PaymentsView clientId={id as string} />
-				</PaymentProvider>
-			</ClientDetailProvider>
+			<PaymentsView clientId={id as string} paymentClient={paymentClient} />
 		</main>
 	);
 }
