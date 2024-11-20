@@ -28,7 +28,7 @@ export async function fetchRouters(): Promise<Router[]> {
 		sectors(nombre_sector)`);
 
 	if (consulta.error) {
-		console.log(consulta.error);
+		console.error(consulta.error);
 	}
 
 	if (!consulta.data) {

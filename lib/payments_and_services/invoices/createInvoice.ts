@@ -52,7 +52,6 @@ export async function validatePrepayment(client_id: string, deuda: number): Prom
 
 	const deudaActual = deuda + prepayments_total;
 
-	console.log('Deuda actual', deudaActual);
 	if (deudaActual <= 0) {
 		return deudaActual;
 	}

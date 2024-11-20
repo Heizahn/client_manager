@@ -88,7 +88,7 @@ export async function fetchSuspendedClients(): Promise<ClientType[]> {
 		.order('nombre');
 
 	if (error) {
-		console.log(error);
+		console.error(error);
 	}
 	if (!data) {
 		return [];
@@ -246,14 +246,12 @@ export async function fetchServicesReceivable(clientId: string): Promise<Service
 		.order('created_at', { ascending: false });
 
 	if (error) {
-		console.log(error);
+		console.error(error);
 	}
 
 	if (!data) {
 		return [];
 	}
-
-	console.log(data);
 
 	return data;
 }
@@ -296,7 +294,7 @@ export async function fetchPaysByClient(clientId: string): Promise<PaymentStruct
 		.order('created_at', { ascending: false });
 
 	if (error) {
-		console.log(error);
+		console.error(error);
 		throw new Error('Error al obtener los pagos');
 	}
 
