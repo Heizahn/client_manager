@@ -1,18 +1,21 @@
-'use client';
-import { useRouter } from 'next/navigation';
-
+import Link from 'next/link';
 export default function NotFound() {
-	const router = useRouter();
-
 	return (
 		<main className='h-screen flex flex-col items-center justify-center'>
 			<h2 className='text-4xl'>Recurso no encontrado</h2>
-			<button
+			<Link
 				className='mt-3 border-b-2  border-transparent hover:border-b-white transition-all duration-300 ease-linear text-lg'
-				onClick={router.back}
+				href='/dashboard/clients'
 			>
-				Volver atrás
-			</button>
+				Volver Clientes
+			</Link>
+
+			<Link
+				className='mt-3 border-b-2  border-transparent hover:border-b-white transition-all duration-300 ease-linear text-lg'
+				href='/dashboard'
+			>
+				Volver al inicio
+			</Link>
 		</main>
 	);
 }
