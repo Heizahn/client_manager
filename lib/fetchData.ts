@@ -10,6 +10,7 @@ import { createClient, createClientDetails, createClientTables } from './supabas
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore } from 'next/cache';
 import { ClientDetailsType, ClientType } from './typesConsultas';
+import { redirect } from 'next/navigation';
 
 export async function fetchAllClients(): Promise<ClientType[]> {
 	noStore();
@@ -189,6 +190,10 @@ export async function fetchClientStatusById(
 
 	if (error) {
 		throw new Error('Error al buscar el cliente');
+	}
+
+	if (data.length === 0) {
+		redirect('/dashboard/404');
 	}
 
 	return data[0] as unknown as {
