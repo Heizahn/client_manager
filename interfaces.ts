@@ -22,7 +22,6 @@ export interface Client extends ClientOrigin {
 }
 
 export interface ClientDetailsHeader {
-	id: string;
 	nombre: string;
 	saldo: number;
 	estado: boolean;

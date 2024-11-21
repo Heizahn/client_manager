@@ -255,7 +255,8 @@ export async function fetchClientPayment(clientId: string) {
 		)
 		.eq('id', clientId)
 		.filter('service_receivable.estado', 'eq', true)
-		.lt('service_receivable.deuda', 0);
+		.lt('service_receivable.deuda', 0)
+		.order('created_at', { referencedTable: 'service_receivable', ascending: true });
 
 	if (error) {
 		throw new Error('Error al obtener los pagos');

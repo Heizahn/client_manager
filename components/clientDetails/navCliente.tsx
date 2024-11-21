@@ -1,5 +1,5 @@
 'use client';
-import { useStoreClientView } from '@/store/storeClientView';
+import { useClientDetailContext } from '@/components/clientDetails/clientDetailContext';
 
 export default function NavCliente() {
 	const {
@@ -11,7 +11,7 @@ export default function NavCliente() {
 		setViewInvoices,
 		setViewPayments,
 		setViewStatistics,
-	} = useStoreClientView((state) => state);
+	} = useClientDetailContext();
 	return (
 		<nav className='px-4 py-2 mt-4 '>
 			<ul className='flex flex-row gap-8 text-base font-bold mb-2'>

@@ -1,5 +1,5 @@
 'use client';
-import { useStoreClientView } from '@/store/storeClientView';
+import { useClientDetailContext } from '../clientDetails/clientDetailContext';
 import PaymentsTable from './paymentsTable';
 import ShowFormPay from './showFormPay';
 import { PaymentStruct } from '@/interfaces';
@@ -11,7 +11,7 @@ export default function PaymentsView({
 	clientId: string;
 	paymentClient: PaymentStruct[];
 }) {
-	const { payments } = useStoreClientView();
+	const { payments } = useClientDetailContext();
 
 	return (
 		payments && (

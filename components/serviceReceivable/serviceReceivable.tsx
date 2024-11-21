@@ -3,9 +3,8 @@
 import { ServiceReceivable as ServiceReceivableType } from '@/interfaces';
 import ServiceReceivableTable from './serviceReceivableTable';
 import { useState } from 'react';
-import { useStoreClientView } from '@/store/storeClientView';
 import NewServiceReceivable from './newServiceReceivable';
-import { useServiceReceivableContext } from './serviceReceicvableContex';
+import { useClientDetailContext } from '../clientDetails/clientDetailContext';
 
 export default function ServiceReceivable({
 	clientId,
@@ -14,7 +13,7 @@ export default function ServiceReceivable({
 	clientId: string;
 	serviceReceivable: ServiceReceivableType[];
 }) {
-	const { invoices } = useStoreClientView();
+	const { invoices } = useClientDetailContext();
 	const [showFormNewService, setShowFormNewService] = useState(false);
 
 	return (

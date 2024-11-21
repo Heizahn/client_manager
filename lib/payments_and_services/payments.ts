@@ -87,17 +87,12 @@ export async function validatePaymentService(values: ValidatePaymentService) {
 
 	const { id, service_receivable_id, client_id, monto_ref } = data[0];
 
-	const result = await serviceReceivablePaid({
+	await serviceReceivablePaid({
 		client_id,
 		service_receivable_id,
 		monto_ref,
 		pay_id: id,
 	});
-
-	await supabase
-		.from('service_receivable')
-		.update({ deuda: result })
-		.eq('id', service_receivable_id);
 }
 
 export async function serviceReceivablePaid(values: {
@@ -105,7 +100,7 @@ export async function serviceReceivablePaid(values: {
 	service_receivable_id: string;
 	monto_ref: number;
 	pay_id: string;
-}): Promise<number> {
+}): Promise<void> {
 	const supabase = await createClient();
 
 	const { data, error } = await supabase
@@ -126,16 +121,57 @@ export async function serviceReceivablePaid(values: {
 	const deudaActual = deuda + values.monto_ref;
 
 	if (deudaActual <= 0) {
-		return deudaActual;
+		await supabase
+			.from('service_receivable')
+			.update({ deuda: deudaActual })
+			.eq('id', values.service_receivable_id);
 	}
 
 	if (deudaActual > 0) {
-		await createPrepayment({
-			amount: deudaActual,
+		await supabase
+			.from('service_receivable')
+			.update({ deuda: 0 })
+			.eq('id', values.service_receivable_id);
+
+		const other_service_receivable = await otherServiceReceivablePaid(client_id);
+
+		if (!other_service_receivable.ok) {
+			await createPrepayment({
+				amount: deudaActual,
+				client_id,
+				pay_id: values.pay_id,
+			});
+
+			return;
+		}
+
+		await serviceReceivablePaid({
 			client_id,
+			service_receivable_id: other_service_receivable?.id,
+			monto_ref: deudaActual,
 			pay_id: values.pay_id,
 		});
 	}
+}
 
-	return 0;
+export async function otherServiceReceivablePaid(client_id: string) {
+	const supabase = await createClient();
+
+	const { data, error } = await supabase
+		.from('service_receivable')
+		.select('id, client_id, deuda')
+		.filter('client_id', 'eq', client_id)
+		.lt('deuda', 0)
+		.order('created_at', { ascending: true })
+		.limit(1);
+
+	if (error) {
+		throw new Error('Error al obtener factura ' + error.message);
+	}
+
+	if (data.length === 0) {
+		return { ...data?.[0], ok: false };
+	}
+
+	return { ...data?.[0], ok: true };
 }

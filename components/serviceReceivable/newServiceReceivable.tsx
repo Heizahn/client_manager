@@ -18,7 +18,6 @@ export default function NewServiceReceivable({
 }) {
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
-
 	const handleSubmit = (values: { motivo: string; monto: number }) => {
 		setLoading(true);
 
@@ -30,6 +29,7 @@ export default function NewServiceReceivable({
 		})
 			.then((res) => {
 				if (res) {
+					router.refresh();
 					toast.success(res);
 					setShow(false);
 				}
@@ -39,7 +39,6 @@ export default function NewServiceReceivable({
 			})
 			.finally(() => {
 				setLoading(false);
-				router.refresh();
 			});
 	};
 

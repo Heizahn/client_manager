@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import { createClientExterno } from '../../supabase/clientExterno';
 
 interface Values {

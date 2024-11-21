@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { fetchClientPayment } from '@/lib/fetchData';
 import { fetchClientPay } from '@/lib/payments_and_services/payments';
 import SkeletonPay from './skeletonPay';
-import { usePaymentContext } from './paymentContext';
 import montoPermitido from '@/lib/montoPermitido';
 import { useRouter } from 'next/navigation';
 
@@ -64,12 +63,12 @@ export default function NewPay({
 							motivo: values.motivo,
 						})
 							.then((res) => {
+								router.refresh();
 								toast.success(res);
 							})
 							.catch((err) => toast.error(err.message))
 							.finally(() => {
 								setShow(false);
-								router.refresh();
 							});
 					}}
 					validationSchema={schemaValidate}

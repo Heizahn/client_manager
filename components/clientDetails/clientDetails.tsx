@@ -3,13 +3,12 @@ import Detail from './detail';
 import DetailContainer from './detailContainer';
 import { formatDate } from '../dateFormat';
 import { formatMoney } from '../formatMoney';
-import { useStoreClientView } from '@/store/storeClientView';
-
 import SkeletonDetail from './skeletonDetail';
 import { ClientDetailsType } from '@/lib/typesConsultas';
+import { useClientDetailContext } from './clientDetailContext';
 
 export default function ClientDetailsById({ client }: { client: ClientDetailsType }) {
-	const { details } = useStoreClientView();
+	const { details } = useClientDetailContext();
 
 	return (
 		details &&
