@@ -118,7 +118,7 @@ export async function serviceReceivablePaid(values: {
 
 	const { client_id, deuda } = data[0];
 
-	const deudaActual = deuda + values.monto_ref;
+	const deudaActual = Math.round(deuda + values.monto_ref);
 
 	if (deudaActual <= 0) {
 		await supabase
@@ -135,7 +135,7 @@ export async function serviceReceivablePaid(values: {
 
 		const other_service_receivable = await otherServiceReceivablePaid(client_id);
 
-		if (!other_service_receivable.ok) {
+		if (other_service_receivable.length === 0) {
 			await createPrepayment({
 				amount: deudaActual,
 				client_id,
@@ -147,7 +147,7 @@ export async function serviceReceivablePaid(values: {
 
 		await serviceReceivablePaid({
 			client_id,
-			service_receivable_id: other_service_receivable?.id,
+			service_receivable_id: other_service_receivable?.[0]?.id,
 			monto_ref: deudaActual,
 			pay_id: values.pay_id,
 		});
@@ -160,7 +160,7 @@ export async function otherServiceReceivablePaid(client_id: string) {
 	const { data, error } = await supabase
 		.from('service_receivable')
 		.select('id, client_id, deuda')
-		.filter('client_id', 'eq', client_id)
+		.eq('client_id', client_id)
 		.lt('deuda', 0)
 		.order('created_at', { ascending: true })
 		.limit(1);
@@ -169,9 +169,5 @@ export async function otherServiceReceivablePaid(client_id: string) {
 		throw new Error('Error al obtener factura ' + error.message);
 	}
 
-	if (data.length === 0) {
-		return { ...data?.[0], ok: false };
-	}
-
-	return { ...data?.[0], ok: true };
+	return data;
 }
