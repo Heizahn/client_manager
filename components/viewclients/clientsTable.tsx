@@ -1,7 +1,16 @@
+'use client';
 import { ClientType } from '@/lib/typesConsultas';
 import ClientRow from './clientRow';
+import { useClientsContext } from './clientsContext';
+import { useEffect } from 'react';
 
 export default function ClientsTable({ clients }: { clients: ClientType[] }) {
+	const { setClients, filterClients } = useClientsContext();
+
+	useEffect(() => {
+		setClients(clients);
+	}, [clients]);
+
 	return (
 		<div className='max-h-[calc(100vh_-_7.5rem)] overflow-y-auto scrollbar-none rounded-b-md'>
 			<table className='w-full bg-gray-800 '>
@@ -19,7 +28,7 @@ export default function ClientsTable({ clients }: { clients: ClientType[] }) {
 					</tr>
 				</thead>
 				<tbody>
-					{clients.map((client: ClientType) => (
+					{filterClients().map((client: ClientType) => (
 						<ClientRow key={client.id} client={client} />
 					))}
 				</tbody>

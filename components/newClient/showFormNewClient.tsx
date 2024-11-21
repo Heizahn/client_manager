@@ -13,7 +13,7 @@ export default function ShowFormNewClient() {
 				onClick={handleClick}
 				className='hover:underline hover:underline-offset-4 px-3 transition-all duration-300 ease-linear'
 			>
-				Nuevo Cliente
+				Crear Cliente
 			</button>
 			{show && <NewClient setShow={setShow} />}
 		</>

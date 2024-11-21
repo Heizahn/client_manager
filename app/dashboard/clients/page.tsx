@@ -1,5 +1,7 @@
 import ShowFormNewClient from '@/components/newClient/showFormNewClient';
+import { ClientsProvider } from '@/components/viewclients/clientsContext';
 import ClientsTable from '@/components/viewclients/clientsTable';
+import SearchClient from '@/components/viewclients/searchClient';
 import { fetchAllClients } from '@/lib/fetchData';
 
 export default async function Page() {
@@ -7,12 +9,17 @@ export default async function Page() {
 
 	return (
 		<div className='mt-2'>
-			<div className='flex flex-row justify-end items-center p-1 rounded-t-md bg-gray-800 '>
-				<div>
-					<ShowFormNewClient />
+			<ClientsProvider>
+				<div className='flex flex-row justify-between items-center py-2 px-4 rounded-t-md bg-gray-800 '>
+					<h2 className='text-center text-2xl font-bold'>Clientes</h2>
+
+					<div className='flex flex-row items-center gap-4'>
+						<SearchClient />
+						<ShowFormNewClient />
+					</div>
 				</div>
-			</div>
-			<ClientsTable clients={clients} />
+				<ClientsTable clients={clients} />
+			</ClientsProvider>
 		</div>
 	);
 }
