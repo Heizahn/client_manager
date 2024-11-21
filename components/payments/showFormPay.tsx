@@ -4,7 +4,13 @@ import { useEffect, useState } from 'react';
 import NewPay from './newPay';
 import { getUserName } from '@/lib/actions';
 
-export default function ShowFormPay({ clientId }: { clientId: string }) {
+export default function ShowFormPay({
+	title,
+	clientId,
+}: {
+	clientId: string;
+	title: React.ReactNode;
+}) {
 	const [show, setShow] = useState(false);
 	const [user, setUser] = useState({ id: '', name: '' });
 
@@ -20,12 +26,7 @@ export default function ShowFormPay({ clientId }: { clientId: string }) {
 	}, [clientId]);
 	return (
 		<>
-			<button
-				onClick={handleClick}
-				className='hover:underline hover:underline-offset-4 px-3 transition-all duration-300 ease-linear'
-			>
-				Nuevo Pago
-			</button>
+			<button onClick={handleClick}>{title}</button>
 			{show && <NewPay user={user} clientId={clientId} setShow={setShow} />}
 		</>
 	);

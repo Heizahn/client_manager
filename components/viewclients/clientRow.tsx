@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatMoney } from '../formatMoney';
 import { ClientType } from '@/lib/typesConsultas';
+import ShowFormPay from '../payments/showFormPay';
+import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 
 export default function ClientRow({ client }: { client: ClientType }) {
 	const router = useRouter();
@@ -49,6 +51,12 @@ export default function ClientRow({ client }: { client: ClientType }) {
 					}`}
 				>
 					{!client.estado ? 'Suspendido' : 'Activo'}
+				</td>
+				<td className='cursor-default'>
+					<ShowFormPay
+						clientId={client.id}
+						title={<CurrencyDollarIcon className='w-5' />}
+					/>
 				</td>
 			</tr>
 		</>

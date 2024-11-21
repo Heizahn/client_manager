@@ -15,6 +15,7 @@ export default function ClientsTable({ clients }: { clients: ClientType[] }) {
 						<th>Plan</th>
 						<th>Saldo</th>
 						<th>Estado</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
