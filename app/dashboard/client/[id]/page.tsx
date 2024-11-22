@@ -9,27 +9,23 @@ import {
 	fetchPaysByClient,
 	fetchServicesReceivable,
 } from '@/lib/fetchData';
-
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
-	const clientStatus = await fetchClientStatusById(id as string);
-	const clientDetails = await fetchClientById(id as string);
-	const servicesReceivable = await fetchServicesReceivable(id as string);
-	const paymentClient = await fetchPaysByClient(id as string);
+	const clientStatus = await fetchClientStatusById(id);
+	const clientDetails = await fetchClientById(id);
+	const servicesReceivable = await fetchServicesReceivable(id);
+	const paymentClient = await fetchPaysByClient(id);
 
 	return (
 		<main className='flex flex-col md:overflow-hidden'>
 			<ClientDetailProvider>
-				<HeaderClient clientId={id as string} clientStatus={clientStatus} />
+				<HeaderClient clientId={id} clientStatus={clientStatus} />
 
 				<ClientDetailsById client={clientDetails} />
 
-				<ServiceReceivable
-					clientId={id as string}
-					serviceReceivable={servicesReceivable}
-				/>
+				<ServiceReceivable clientId={id} serviceReceivable={servicesReceivable} />
 
-				<PaymentsView clientId={id as string} paymentClient={paymentClient} />
+				<PaymentsView clientId={id} paymentClient={paymentClient} />
 			</ClientDetailProvider>
 		</main>
 	);

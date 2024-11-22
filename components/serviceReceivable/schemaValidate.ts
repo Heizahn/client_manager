@@ -5,7 +5,7 @@ export const schemaValidate = yup.object({
 		.string()
 		.required('*')
 		.min(3, 'Mínimo 3 caracteres')
-		.max(15, 'Máximo 15 caracteres'),
+		.max(50, 'Máximo 50 caracteres'),
 	monto: yup.number().required('*').min(0.01, 'Mínimo 0.01 dolares'),
 });
 

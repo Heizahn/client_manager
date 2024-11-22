@@ -35,7 +35,7 @@ export function ClientsProvider({ children }: { children: React.ReactNode }) {
 					.includes(clientFilter.toLowerCase()) ||
 				client.ipv4.toLowerCase().includes(clientFilter.toLowerCase()),
 		);
-	}, [clientFilter]);
+	}, [clients, clientFilter]);
 
 	return (
 		<ClientsContext.Provider
