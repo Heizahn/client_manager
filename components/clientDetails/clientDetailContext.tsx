@@ -1,9 +1,6 @@
 'use client';
 
 import { createContext, useContext, useState } from 'react';
-import { toast } from 'react-toastify';
-import { fetchClientStatusById } from '@/lib/fetchData';
-
 interface ClientDetailContext {
 	details: boolean;
 	invoices: boolean;
@@ -20,10 +17,10 @@ export const ClientDetailContext = createContext<ClientDetailContext>({
 	invoices: false,
 	payments: false,
 	statistics: false,
-	setViewDetails: (section: boolean) => {},
-	setViewInvoices: (section: boolean) => {},
-	setViewPayments: (section: boolean) => {},
-	setViewStatistics: (section: boolean) => {},
+	setViewDetails: () => {},
+	setViewInvoices: () => {},
+	setViewPayments: () => {},
+	setViewStatistics: () => {},
 });
 
 export const ClientDetailProvider = ({ children }: { children: React.ReactNode }) => {

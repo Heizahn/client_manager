@@ -1,4 +1,3 @@
-import { revalidatePath } from 'next/cache';
 import { createClientExterno } from '../../supabase/clientExterno';
 
 interface Values {
@@ -44,7 +43,7 @@ export async function validatePrepayment(client_id: string, deuda: number): Prom
 	}
 
 	let prepayments_total = 0;
-	let pay_id: string = data[0].pay_id;
+	const pay_id: string = data[0].pay_id;
 	await supabase.from('prepayments').delete().eq('client_id', client_id);
 
 	data.forEach(({ amount }) => {

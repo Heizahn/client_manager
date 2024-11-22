@@ -1,7 +1,7 @@
 'use client';
 
 import { ClientType } from '@/lib/typesConsultas';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
 interface ClientsContextType {
 	clients: ClientType[];
@@ -21,7 +21,7 @@ export function ClientsProvider({ children }: { children: React.ReactNode }) {
 	const [clients, setClients] = useState<ClientType[]>([]);
 	const [clientFilter, setClientFilter] = useState('');
 
-	const filterClients = () => {
+	const filterClients = useCallback(() => {
 		if (clientFilter === '') {
 			return clients;
 		}
@@ -35,11 +35,7 @@ export function ClientsProvider({ children }: { children: React.ReactNode }) {
 					.includes(clientFilter.toLowerCase()) ||
 				client.ipv4.toLowerCase().includes(clientFilter.toLowerCase()),
 		);
-	};
-
-	useEffect(() => {
-		filterClients();
-	}, [clients, clientFilter]);
+	}, [clientFilter]);
 
 	return (
 		<ClientsContext.Provider

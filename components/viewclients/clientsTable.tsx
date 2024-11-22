@@ -9,7 +9,7 @@ export default function ClientsTable({ clients }: { clients: ClientType[] }) {
 
 	useEffect(() => {
 		setClients(clients);
-	}, [clients]);
+	}, [clients, setClients]);
 
 	return (
 		<div className='max-h-[calc(100vh_-_7.5rem)] overflow-y-auto scrollbar-none rounded-b-md'>

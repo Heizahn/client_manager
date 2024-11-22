@@ -9,7 +9,6 @@ import type {
 	DataSelectRouter,
 	DataSelectService,
 	DataSelectProfile,
-	ClientPayment,
 } from '@/interfaces';
 import { createClient } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';

@@ -37,7 +37,7 @@ export default function NewPay({
 				setProfiles((prev) => prev.filter((profile) => profile.id !== user.id));
 				setLoading(false);
 			});
-	}, []);
+	}, [clientId, user.id]);
 	return (
 		<div className='absolute top-0 left-0 w-screen h-screen flex flex-col gap-4 items-center justify-center bg-black/50 z-20'>
 			{loading ? (

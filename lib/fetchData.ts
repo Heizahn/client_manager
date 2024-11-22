@@ -1,11 +1,5 @@
 'use server';
-import {
-	ClientDetailsHeader,
-	ClientPayment,
-	CreateClient,
-	PaymentStruct,
-	ServiceReceivable,
-} from '@/interfaces';
+import { ClientPayment, CreateClient, PaymentStruct, ServiceReceivable } from '@/interfaces';
 import { createClient, createClientDetails, createClientTables } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore } from 'next/cache';
