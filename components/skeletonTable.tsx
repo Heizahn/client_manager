@@ -4,15 +4,18 @@ export default function SkeletonTable() {
 			<table className='w-full table-auto bg-gray-800 '>
 				<thead className='sticky top-0 bg-gray-800 mt-2'>
 					<tr className='text-left text-lg animate-pulse'>
-						<th className='pl-4 py-2'>Motivo</th>
-						<th>Fecha Creación</th>
-						<th>Monto</th>
-						<th>Deuda</th>
+						<th className='pl-4 py-2'>Nombre</th>
+						<th>Cedula</th>
+						<th>Telefono</th>
+						<th>Sector</th>
+						<th>IPV4</th>
+						<th>Plan</th>
+						<th>Saldo</th>
 						<th>Estado</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					{/* Aquí es donde irían los datos, pero para el skeleton vamos a crear varias filas con el efecto de carga */}
 					{Array(5)
 						.fill(0)
 						.map((_, idx) => (
@@ -31,6 +34,18 @@ export default function SkeletonTable() {
 								</td>
 								<td>
 									<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
+								</td>
+								<td>
+									<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
+								</td>
+								<td>
+									<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
+								</td>
+								<td>
+									<div className='h-4 bg-gray-700 rounded w-24 animate-pulse'></div>
+								</td>
+								<td>
+									<div className='h-4 bg-gray-700 rounded w-4 animate-pulse'></div>
 								</td>
 							</tr>
 						))}

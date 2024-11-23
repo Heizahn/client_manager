@@ -3,11 +3,6 @@ import Breadcrumbs from '../viewclients/breadcrums';
 export default function LoaderHeader() {
 	return (
 		<>
-			{/* Header */}
-			<div className='mt-2 flex flex-row justify-center items-center py-2 rounded-md bg-gray-800'>
-				<h2 className='text-center text-2xl font-bold'>Detalles del Cliente</h2>
-			</div>
-
 			{/* Main Container */}
 			<div className='bg-gray-800 mt-3 rounded-t-md'>
 				{/* Breadcrumbs */}

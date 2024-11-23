@@ -3,7 +3,6 @@ import { ClientsProvider } from '@/components/viewclients/clientsContext';
 import ClientsTable from '@/components/viewclients/clientsTable';
 import SearchClient from '@/components/viewclients/searchClient';
 import { fetchAllClients } from '@/lib/fetchData';
-import { Suspense } from 'react';
 
 export default async function Page() {
 	const clients = await fetchAllClients();
@@ -19,9 +18,7 @@ export default async function Page() {
 						<ShowFormNewClient />
 					</div>
 				</div>
-				<Suspense fallback={<div>Loading...</div>}>
-					<ClientsTable clients={clients} />
-				</Suspense>
+				<ClientsTable clients={clients} />
 			</ClientsProvider>
 		</div>
 	);

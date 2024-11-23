@@ -17,7 +17,7 @@ export default function FilterStatusClient({ Count, title, href, className }: Pr
 		<Link
 			href={href}
 			className={`${
-				!isActive ? '' : 'underline underline-offset-4'
+				!isActive ? '' : 'font-bold underline underline-offset-4'
 			} hover:underline underline-offset-4 px-3 ${className}`}
 		>
 			{title} {Count}

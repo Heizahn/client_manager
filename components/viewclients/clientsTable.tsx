@@ -17,7 +17,7 @@ export default function ClientsTable({ clients }: { clients: ClientType[] }) {
 				<thead className='sticky top-0 bg-gray-800 mt-2'>
 					<tr className='text-left text-lg'>
 						<th className='pl-4 py-2'>Nombre</th>
-						<th>Identificacion</th>
+						<th>Cedula</th>
 						<th>Telefono</th>
 						<th>Sector</th>
 						<th>IPV4</th>

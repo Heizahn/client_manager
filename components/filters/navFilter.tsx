@@ -12,7 +12,7 @@ async function NavFilter() {
 	const SuspendedCount = await fetchCountSuspendedClients();
 	const DefaultersCount = await fetchCountDefaultersClients();
 	return (
-		<nav className='flex flex-row '>
+		<nav className='flex flex-row' aria-label='Filtro de Clientes'>
 			<FilterStatusClient title='Todos' Count={AllCount} href='/dashboard/clients' />
 			<FilterStatusClient
 				title='Solventes'
