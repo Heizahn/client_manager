@@ -1,5 +1,11 @@
 'use server';
-import { ClientPayment, CreateClient, PaymentStruct, ServiceReceivable } from '@/interfaces';
+import {
+	ClientPayment,
+	CreateClient,
+	PaymentStruct,
+	ServiceReceivable,
+	AllCount,
+} from '@/interfaces';
 import { createClient, createClientDetails, createClientTables } from './supabase/client';
 import { createClient as createClientServer } from './supabase/server';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -92,47 +98,24 @@ export async function fetchSuspendedClients(): Promise<ClientType[]> {
 	return data as unknown as ClientType[];
 }
 
-export async function fetchCountClients(): Promise<number> {
+export async function fetchCountClients(): Promise<AllCount> {
 	noStore();
 	const supabase = await createClient();
-	const { data } = await supabase.from('clients').select('id');
+	const [allClients, solvents, defaulters, suspended] = await Promise.all([
+		supabase.from('clients').select('id'),
+		supabase.from('clients').select('id').gte('saldo', 0).eq('estado', true),
+		supabase.from('clients').select('id').lt('saldo', 0).eq('estado', true),
+		supabase.from('clients').select('id').eq('estado', false),
+	]);
 
-	return data?.length || 0;
-}
+	const allCount = {
+		all: allClients?.data?.length || 0,
+		solvent: solvents?.data?.length || 0,
+		defaulter: defaulters?.data?.length || 0,
+		suspended: suspended?.data?.length || 0,
+	};
 
-export async function fetchCountSolventsClients(): Promise<number> {
-	noStore();
-	const supabase = await createClient();
-	const { data } = await supabase
-		.from('clients')
-		.select('id')
-		.gte('saldo', 0)
-		.eq('estado', true);
-
-	return data?.length || 0;
-}
-
-export async function fetchCountDefaultersClients(): Promise<number> {
-	noStore();
-	const supabase = await createClient();
-	const { data } = await supabase
-		.from('clients')
-		.select('id')
-		.lt('saldo', 0)
-		.eq('estado', true);
-
-	return data?.length || 0;
-}
-
-export async function fetchCountSuspendedClients(): Promise<number> {
-	noStore();
-	const supabase = await createClient();
-	const { count } = await supabase
-		.from('clients')
-		.select('id', { count: 'exact', head: true })
-		.eq('estado', false);
-
-	return count || 0;
+	return allCount;
 }
 
 export async function fetchClientById(id: string): Promise<ClientDetailsType> {

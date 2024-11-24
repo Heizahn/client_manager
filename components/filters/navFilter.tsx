@@ -1,34 +1,26 @@
-import {
-	fetchCountClients,
-	fetchCountDefaultersClients,
-	fetchCountSolventsClients,
-	fetchCountSuspendedClients,
-} from '@/lib/fetchData';
+import { fetchCountClients } from '@/lib/fetchData';
 import FilterStatusClient from '@/components/filters/filterStatusClient';
 
 async function NavFilter() {
 	const AllCount = await fetchCountClients();
-	const SolventsCount = await fetchCountSolventsClients();
-	const SuspendedCount = await fetchCountSuspendedClients();
-	const DefaultersCount = await fetchCountDefaultersClients();
 	return (
 		<nav className='flex flex-row' aria-label='Filtro de Clientes'>
-			<FilterStatusClient title='Todos' Count={AllCount} href='/dashboard/clients' />
+			<FilterStatusClient title='Todos' Count={AllCount.all} href='/dashboard/clients' />
 			<FilterStatusClient
 				title='Solventes'
-				Count={SolventsCount}
+				Count={AllCount.solvent}
 				href='/dashboard/clients/solvents'
 				className='text-green-500'
 			/>
 			<FilterStatusClient
 				title='Defaulters'
-				Count={DefaultersCount}
+				Count={AllCount.defaulter}
 				href='/dashboard/clients/defaulters'
 				className='text-orange-500'
 			/>
 			<FilterStatusClient
 				title='Suspendidos'
-				Count={SuspendedCount}
+				Count={AllCount.suspended}
 				href='/dashboard/clients/suspended'
 				className='text-red-500'
 			/>

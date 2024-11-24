@@ -11,6 +11,7 @@ import { fetchClientPay } from '@/lib/payments_and_services/payments';
 import SkeletonPay from './skeletonPay';
 import montoPermitido from '@/lib/montoPermitido';
 import { useRouter } from 'next/navigation';
+import sendWhatsappPayment from '@/lib/send_whatsapp/sendWhatsapp';
 
 export default function NewPay({
 	user,
@@ -22,6 +23,7 @@ export default function NewPay({
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [loading, setLoading] = useState(true);
+	const [registerPay, setRegisterPay] = useState(false);
 	const [profiles, setProfiles] = useState<DataSelectProfile[]>([]);
 	const [client, setClient] = useState<ClientPayment | null>(null);
 	const router = useRouter();
@@ -51,6 +53,7 @@ export default function NewPay({
 						service_receivable_id: client?.service_receivable?.[0]?.id || '',
 					}}
 					onSubmit={(values: PaymentValues) => {
+						setRegisterPay(true);
 						fetchClientPay({
 							client_id: clientId,
 							created_by: user.id,
@@ -69,6 +72,18 @@ export default function NewPay({
 							.catch((err) => toast.error(err.message))
 							.finally(() => {
 								setShow(false);
+								setRegisterPay(false);
+								sendWhatsappPayment({
+									client_id: clientId,
+									monto_bs: Math.round(values.monto_bs * 100),
+									monto_ref: Math.round(values.monto_ref * 100),
+									reference: values.referencia,
+									motivo: values.motivo,
+								})
+									.then((res) => {
+										toast.success(res);
+									})
+									.catch((err) => toast.error(err.message));
 							});
 					}}
 					validationSchema={schemaValidate}
@@ -292,7 +307,7 @@ export default function NewPay({
 									className='w-full mt-1 rounded-md px-2 py-1 outline-2 outline-gray-600 text-gray-950'
 								/>
 							</div>
-							<ButtonSubmit loading={loading} className='mt-5'>
+							<ButtonSubmit loading={loading || registerPay} className='mt-5'>
 								Crear
 							</ButtonSubmit>
 						</Form>

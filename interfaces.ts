@@ -155,3 +155,10 @@ export interface LastPayment {
 	monto_ref: number;
 	client_id: string;
 }
+
+export interface AllCount {
+	all: number;
+	solvent: number;
+	defaulter: number;
+	suspended: number;
+}
