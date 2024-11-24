@@ -40,7 +40,7 @@ export default function Page() {
 				}
 				toast.error(err.message);
 			});
-	}, [qrCode, socket]);
+	}, [qrCode, socket, router]);
 
 	return (
 		<div>

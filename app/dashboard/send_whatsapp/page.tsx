@@ -83,7 +83,7 @@ export default function Page() {
 		};
 
 		isLoggedIn();
-	}, []);
+	}, [router]);
 	return (
 		<div>
 			<h2>Send Whatsapp</h2>
