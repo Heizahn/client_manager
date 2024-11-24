@@ -4,6 +4,8 @@ import { ServiceReceivable } from '@/interfaces';
 import { formatDate } from '../dateFormat';
 import { formatMoney } from '../formatMoney';
 import { toast } from 'react-toastify';
+import { anularService } from '@/lib/payments_and_services/invoices/anularService';
+import { useRouter } from 'next/navigation';
 
 export default function ServiceReceivableDetail({
 	serviceReceivable,
@@ -12,6 +14,24 @@ export default function ServiceReceivableDetail({
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 	serviceReceivable: ServiceReceivable;
 }) {
+	const router = useRouter();
+	const handleAnular = () => {
+		if (confirm('¿Está seguro de anular el servicio?')) {
+			anularService(serviceReceivable.id)
+				.then((res) => {
+					toast.warning(res);
+					setShow(false);
+				})
+				.catch((err) => {
+					toast.error(err.message);
+				})
+				.finally(() => {
+					router.refresh();
+				});
+		} else {
+			toast.info('Anulación cancelada');
+		}
+	};
 	return (
 		<div className='fixed top-0 left-0 h-screen w-screen bg-black/50 z-20 flex items-center cursor-default'>
 			<div className='mx-auto bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-6'>
@@ -46,7 +66,10 @@ export default function ServiceReceivableDetail({
 						>{`${serviceReceivable.estado ? 'Activo' : 'Anulado'}`}</p>
 					</div>
 					<div className='mt-2 flex justify-center items-center gap-6'>
-						<button className='bg-red-600 px-4 py-1 rounded-md border-1 border-transparent transition-all duration-150 ease-linear active:bg-red-700'>
+						<button
+							onClick={handleAnular}
+							className='bg-red-600 px-4 py-1 rounded-md border-1 border-transparent transition-all duration-150 ease-linear active:bg-red-700'
+						>
 							Anular
 						</button>
 						<button

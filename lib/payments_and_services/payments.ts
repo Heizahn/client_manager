@@ -41,6 +41,7 @@ export async function fetchClientPay(values: PayValues) {
 	noStore();
 	const supabase = await createClient();
 
+	console.log(`Monto Pago a insertar`, values.monto_ref);
 	const { error: errorInsert } = await supabase.from('payments').insert({
 		...values,
 		service_receivable_id: values.service_receivable_id || null,
@@ -75,7 +76,9 @@ export async function validatePaymentService(values: ValidatePaymentService) {
 	const { data, error } = await supabase
 		.from('payments')
 		.select('id, service_receivable_id, client_id, monto_ref')
-		.eq('service_receivable_id', values.service_receivable_id);
+		.eq('service_receivable_id', values.service_receivable_id)
+		.order('created_at', { ascending: false })
+		.limit(1);
 
 	if (error) {
 		throw new Error('Error al validar pago de factura ' + error.message);
@@ -120,17 +123,25 @@ export async function serviceReceivablePaid(values: {
 
 	const deudaActual = Math.round(deuda + values.monto_ref);
 
+	const { data: service_receivable } = await supabase
+		.from('service_receivable')
+		.select('payment_id')
+		.eq('id', values.service_receivable_id);
+
+	const id_pays: string[] = service_receivable?.[0]?.payment_id;
+	id_pays.push(values.pay_id);
+
 	if (deudaActual <= 0) {
 		await supabase
 			.from('service_receivable')
-			.update({ deuda: deudaActual })
+			.update({ deuda: deudaActual, payment_id: id_pays })
 			.eq('id', values.service_receivable_id);
 	}
 
 	if (deudaActual > 0) {
 		await supabase
 			.from('service_receivable')
-			.update({ deuda: 0 })
+			.update({ deuda: 0, payment_id: id_pays })
 			.eq('id', values.service_receivable_id);
 
 		const other_service_receivable = await otherServiceReceivablePaid(client_id);
@@ -151,6 +162,8 @@ export async function serviceReceivablePaid(values: {
 			monto_ref: deudaActual,
 			pay_id: values.pay_id,
 		});
+
+		return;
 	}
 }
 
@@ -162,6 +175,7 @@ export async function otherServiceReceivablePaid(client_id: string) {
 		.select('id, client_id, deuda')
 		.eq('client_id', client_id)
 		.lt('deuda', 0)
+		.eq('estado', true)
 		.order('created_at', { ascending: true })
 		.limit(1);
 
