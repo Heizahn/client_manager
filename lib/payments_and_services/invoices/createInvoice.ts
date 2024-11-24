@@ -68,7 +68,7 @@ export async function validatePrepayment(
 	}
 
 	let prepayments_total = 0;
-	let id_pays: string[] = [];
+	const id_pays: string[] = [];
 	const pay_id: string = data[0].pay_id;
 
 	data.forEach(({ pay_id, amount }) => {
