@@ -3,13 +3,14 @@
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { HOST_WS } from '@/ENV';
 import { toast } from 'react-toastify';
 
 export default function Page() {
 	const [qrCode, setQrCode] = useState('');
 	const [loading, setLoading] = useState(true);
+	const router = useRouter();
 	const socket = io('http://localhost:3000/');
 
 	socket.connect();
@@ -18,7 +19,7 @@ export default function Page() {
 		socket.on('auth', () => {
 			setQrCode('');
 			setLoading(false);
-			redirect('/dashboard/send_whatsapp');
+			router.replace('/dashboard/send_whatsapp');
 		});
 		socket.on('qr_code', (data) => {
 			setQrCode(data.qr_code);
@@ -28,8 +29,8 @@ export default function Page() {
 		fetch(`${HOST_WS}/api/v1/login_whatsapp`)
 			.then((res) => res.json())
 			.then((data) => {
-				if (data === 'Authenticated') {
-					redirect('/dashboard/send_whatsapp');
+				if (data.message === 'Authenticated') {
+					router.replace('/dashboard/send_whatsapp');
 				}
 			})
 			.catch((err) => {
