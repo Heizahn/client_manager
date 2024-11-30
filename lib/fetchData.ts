@@ -101,18 +101,13 @@ export async function fetchSuspendedClients(): Promise<ClientType[]> {
 export async function fetchCountClients(): Promise<AllCount> {
 	noStore();
 	const supabase = await createClient();
-	const [allClients, solvents, defaulters, suspended] = await Promise.all([
-		supabase.from('clients').select('id'),
-		supabase.from('clients').select('id').gte('saldo', 0).eq('estado', true),
-		supabase.from('clients').select('id').lt('saldo', 0).eq('estado', true),
-		supabase.from('clients').select('id').eq('estado', false),
-	]);
+	const { data } = await supabase.from('clients').select('id, saldo, estado');
 
 	const allCount = {
-		all: allClients?.data?.length || 0,
-		solvent: solvents?.data?.length || 0,
-		defaulter: defaulters?.data?.length || 0,
-		suspended: suspended?.data?.length || 0,
+		all: data?.length || 0,
+		solvent: data?.filter((client) => client.saldo >= 0 && client.estado).length || 0,
+		defaulter: data?.filter((client) => client.saldo < 0 && client.estado).length || 0,
+		suspended: data?.filter((client) => !client.estado).length || 0,
 	};
 
 	return allCount;

@@ -12,7 +12,7 @@ export default function ToastProvider({ children }: ToastProviderProps) {
 	return (
 		<>
 			{children}
-			<ToastContainer theme='dark' closeOnClick={true} />
+			<ToastContainer theme='dark' closeOnClick={true} autoClose={1500} />
 		</>
 	);
 }
