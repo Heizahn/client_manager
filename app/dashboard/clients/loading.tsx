@@ -17,7 +17,7 @@ export default function Loading() {
 					</button>
 				</div>
 			</div>
-			<SkeletonTable />;
+			<SkeletonTable />
 		</div>
 	);
 }
