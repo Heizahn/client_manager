@@ -14,14 +14,16 @@ export async function createInvoicesAutomatic() {
 		for (const client of clients) {
 			const title = `${client.services?.nombre_service} Residencial - `;
 
-			await createInvoice({
-				clientId: client.id,
-				motivo: title + months[new Date().getMonth()],
-				monto: client.services?.costo,
-				deuda: -client.services?.costo,
-			})
-				.then((res) => console.info(res))
-				.catch((err) => console.error(err.message));
+			if (client.services?.costo > 0) {
+				await createInvoice({
+					clientId: client.id,
+					motivo: title + months[new Date().getMonth()],
+					monto: client.services?.costo,
+					deuda: -client.services?.costo,
+				})
+					.then((res) => console.info(res))
+					.catch((err) => console.error(err.message));
+			}
 		}
 	}
 }

@@ -24,7 +24,7 @@ export async function fetchAllClients(): Promise<ClientType[]> {
 		.order('nombre');
 
 	if (error) {
-		console.log(error);
+		throw new Error(error.message);
 	}
 	if (!data) {
 		return [];
