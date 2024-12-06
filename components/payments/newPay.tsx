@@ -23,21 +23,26 @@ export default function NewPay({
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const [loading, setLoading] = useState(true);
+	const [loadingProfile, setLoadingProfile] = useState(true);
 	const [registerPay, setRegisterPay] = useState(false);
 	const [profiles, setProfiles] = useState<DataSelectProfile[]>([]);
 	const [client, setClient] = useState<ClientPayment | null>(null);
 	const router = useRouter();
 
 	useEffect(() => {
+		console.log(clientId);
 		fetchClientPayment(clientId)
 			.then((res) => setClient(res))
-			.catch((err) => toast.error(err.message));
+			.catch((err) => toast.error(err.message))
+			.finally(() => {
+				setLoading(false);
+			});
 		fetchDataSelectProfile()
 			.then((res) => setProfiles(res))
 			.catch((err) => toast.error(err.message))
 			.finally(() => {
 				setProfiles((prev) => prev.filter((profile) => profile.id !== user.id));
-				setLoading(false);
+				setLoadingProfile(false);
 			});
 	}, [clientId, user.id]);
 	return (
@@ -250,11 +255,18 @@ export default function NewPay({
 									<option value={user.id}>{user.name}</option>
 									{profiles.length > 0 && (
 										<>
-											{profiles.map((profile) => (
-												<option key={profile.id} value={profile.id}>
-													{profile.name}
-												</option>
-											))}
+											{!loadingProfile ? (
+												profiles.map((profile) => (
+													<option
+														key={profile.id}
+														value={profile.id}
+													>
+														{profile.name}
+													</option>
+												))
+											) : (
+												<option>Cargando...</option>
+											)}
 										</>
 									)}
 								</Field>
